@@ -355,8 +355,87 @@ Funksiya `String` (odatda JSON) formatida javob qaytaradi. Uni `Gson` yordamida 
 ```kotlin
 val gson = Gson()
 val parsed = gson.fromJson(jsonString, GetResponse::class.java)
+```
+### `GET` so‘rov
+```kotlin
+   Thread{
+        val res: String = lib.malumotOlish(0, 0, null, "GET", null, null)
+  //            MALUMOT STRING FARMATDA KELADI MALUMOTNI JSON PARSE QILISH KERAK
+        runOnUiThread {
+            Toast.makeText(this, "GET: ${res}", Toast.LENGTH_SHORT).show()
+        }
+  //            JSON PARSE QILISH MALUMOTNI
+        val gson = Gson()
+        val parsed = gson.fromJson(res, GetResponse::class.java)
+    }.start()
+```
+### `POST` so‘rov
+```kotlin
+      val name = "Sarlavha"
+      val desc = "Bu postning tanasi"
 
+      val postData = HashMap<String, String>()
+      postData["title"] = name
+      postData["body"] = desc
+      postData["userId"] = "1"
+      val jsonBody: String = gson.toJson(postData)
+      val headers = arrayOf("Content-Type: application/json" /*,"Authorization: Bearer YOUR_TOKEN"*/)
+      Thread {
+          try {
+              val res = lib.malumotOlish(0, 0, null, "POST", headers, jsonBody)
+//                JSON PARSEDAN OLDIN STRING FARMATDA RESPONSE QAYTADI MALUMOTNI JSON PARSE QILISH KERAK
+              runOnUiThread {
+                  Toast.makeText(this, "POST: ${res}", Toast.LENGTH_SHORT).show()
+              }
+//                JSON PARSE QILISH
+              val gson = Gson()
+              val parsed = gson.fromJson(res, DataResponse::class.java)
 
+          } catch (e: Exception) {
+              Log.e("POST ERROR", "Xatolik: ${e.message}")
+          }
+      }.start()
+```
 
+### `PUT` so‘rov
+```kotlin
+      val updatedData: MutableMap<String, String> = HashMap()
+      updatedData["title"] = "Yangi sarlova"
+      updatedData["body"] = "Put so'rovini test qilish"
+      updatedData["userId"] = java.lang.String.valueOf(1)
 
+      val putBody = gson.toJson(updatedData)
+      val putHeaders = arrayOf("Content-Type: application/json")
+      Thread {
+          try {
+              // IDISI 7 GA TENG MALUMOTNI TAHRIRLASH
+              val res = lib.malumotOlish(0, 0, "7", "PUT", putHeaders, putBody)
+              runOnUiThread {
+                  Toast.makeText(this, "PUT: ${res}", Toast.LENGTH_SHORT).show()
+              }
 
+              val parsed = gson.fromJson(res, DataResponse::class.java)
+
+          } catch (e: java.lang.Exception) {
+              Log.e("PUT REQUEST ERROR", "Xatolik yuz berdi:", e)
+          }
+      }.start()
+```
+
+### `DELETE` so‘rov
+```kotlin
+   Thread {
+        try {
+            // IDISI 2 GA TENG MALUMOTNI O;CHIRISH
+            val res: String = lib.malumotOlish(0, 0, "2", "DELETE", null, null)
+            runOnUiThread {
+                Toast.makeText(this, "DELETE: ${res}", Toast.LENGTH_SHORT).show()
+            }
+
+            val parsed = gson.fromJson(res, DataResponse::class.java)
+
+        } catch (e: java.lang.Exception) {
+            Log.e("DELETE ERROR", "Xatolik yuz berdi:", e)
+        }
+    }.start()
+```
