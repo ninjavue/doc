@@ -6,8 +6,7 @@ Zirh kutubxona faylini joylashtiring. Shu tariqa kutubxona
 loyihangizga qo‘shilgan bo‘ladi.
 #
 settings.gradle.kts faylini oching, dependencyResolutionManagement bo'limidagi repositories qismiga libs papkasining joylashuvini
-ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi va
-ulaydi. Masalan: 
+ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi. Masalan: 
 <pre lang="md"> <code>
   dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -19,4 +18,11 @@ ulaydi. Masalan:
         }
     }
 }
+</code> </pre>
+#
+Bu kodni dasturingizga qo'shganingizdan keyin build.gradle.kts(app) faylni ichiga kutubxonani implementation qilib yozib qo'ying. Masalan:
+<pre lang="md"> <code> 
+  dependencies {
+    implementation(":zirhlib-release@aar")
+  }
 </code> </pre>
