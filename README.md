@@ -32,6 +32,53 @@ Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massa
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
+## 📁 `faylManzili()` Funksiyasi
+
+Ushbu funksiya kutubxonaga **`assets` papkasidagi faylga kirish imkonini beradi**.  
+Funksiyani chaqirish orqali kutubxona ichida joylashgan faylga to‘g‘ridan-to‘g‘ri kirish va uni o‘qish imkoniyati paydo bo‘ladi.
+
+> 📌 **Eslatma:** Faylga kirish uchun Android ilovasidagi `assets` obyektini funksiya ichiga uzatishingiz kerak.
+
+---
+
+### 🧑‍💻 Foydalanish namunasi
+
+Quyidagi kod `BaseActivity` klassida `onCreate()` ichida `faylManzili()` funksiyasini qanday chaqirishni ko‘rsatadi:
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    
+    // assets papkasiga kirish uchun kutubxonaga kontekst beriladi
+    ZirhMilliy.faylManzili(assets)
+}
+```
+
+---
+
+### 📂 Qayerdagi faylni o‘qiydi?
+
+`assets/` papkasida joylashgan fayllarni o‘qish uchun mo‘ljallangan.  
+Masalan:
+
+```
+app/
+├── src/
+│   └── main/
+│       └── assets/
+│           └── config.json
+```
+
+Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
+
+---
+
+### ✅ Tavsiya
+
+- Fayl nomini to‘g‘ri ko‘rsating va `assets.open("fayl_nomi")` usulidan foydalaning.
+- Fayl o‘qishdagi xatoliklarni `try-catch` bilan ushlash xavfsizroq bo‘ladi.
+- Ilova ishga tushganda birinchi marta sozlashlar (config, token, URL va h.k.) shu tarzda yuklanishi mumkin.
+
 #
 ## 🚦 VPNni Aniqlash Funktsiyasi
 
