@@ -53,7 +53,7 @@ Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks 
 > ⚠️ **Emulyatorda ishlayotgan ilova xavfsizlik jihatidan ishonchsiz hisoblanadi.**  
 > Bu holatda ilova buzilishi, teskari tahlil (reverse engineering) qilinishi yoki yolg‘on ma’lumotlar bilan test qilinishi mumkin.
 
-> ✅ **Tavsiya:**  
+> ✅ **Eslatma:**  
 > Agar emulyator aniqlansa, foydalanuvchiga ogohlantiruvchi xabar chiqaring va ilovani yopish uchun quyidagi funksiyalardan foydalaning:
 >
 > ```kotlin
@@ -64,14 +64,25 @@ Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks 
 ---
 
 ---
-
 ## ⚠️ Rootni Aniqlash Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
 Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
 
-> ⚠️ **Agar funksiya `true` qiymat qaytarsa, bu qurilma xavfsizlik talablariga javob bermasligini bildiradi.**  
-> Foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish tavsiya etiladi (`finishAffinity()` yoki `System.exit(0)` yordamida).
+> 🔐 **Root qilingan qurilma xavfsizlik talablariga javob bermaydi.**  
+> Bunday qurilmalarda foydalanuvchi yoki zararli dastur tizimga chuqur kirib, ilova ma’lumotlarini o‘zgartirishi yoki o‘g‘irlashi mumkin.
+
+> ✅ **Eslatma:**  
+> Agar qurilma root qilingan bo‘lsa (`true` qaytsa), foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish kerak:
+>
+> ```kotlin
+> Toast.makeText(context, "Root qilingan qurilmada ilova ishlamaydi", Toast.LENGTH_LONG).show()
+> finishAffinity() // ilovani yopish
+> System.exit(0)   // ilovani to‘liq to‘xtatish
+> ```
+
+---
+
 
 
 
