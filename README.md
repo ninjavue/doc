@@ -33,7 +33,7 @@ Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massa
 ```
 ---
 ## 🔐 Ma'lumotlarni Shifrlash
-#
+
 ### ✨ Nima uchun shifrlash zarur?
 
 Ilovada ishlatiladigan ba'zi muhim ma'lumotlar — masalan, **backend server URL’lari**, **directory manzillar**, **tokenlar**, **hash qiymatlar**, va **ilovaning imzo (signature) ma'lumotlari** — maxfiy va xavfsizlik talablariga javob beruvchi shaklda saqlanishi kerak.
@@ -54,7 +54,20 @@ Shuning uchun **shifrlash yordamida bu ma’lumotlarni himoyalash** va ularni fa
 #
 
 ### 📌 Shifrlash va foydalanish ketma-ketligi
+Quyidagi bosqichlar orqali ilova uchun maxfiy ma’lumotlarni shifrlash va undan xavfsiz foydalanish mumkin.
+### 1. 📄 JSON fayl tayyorlash
 
+Birinchi bosqichda maxfiy ma'lumotlar `data.json` faylga quyidagi formatda yoziladi:
+
+```json
+{
+    "domainlar": ["https://jsonplaceholder.typicode.com", "https://httpbin.org"],
+    "havolalar": ["posts", "post"],
+    "hashlar": ["sha256///UzJAZYxLBnEpBwXAcmd4WHi7f8aYgfMExGnoyp5B04=", "sha256//IFG+z/oQKXfpUYOHgWHy5axgkT9B01XSxwb2AHDyN34="],
+    "tokenlar": ["abc123", "def456", "ghi789"],
+    "imzo": "B83BC82F4E631114B79E5E01DB8590CAF76D3384B2CFCFEE27F31B0C886262B1"
+}
+```
 ---
 
 
