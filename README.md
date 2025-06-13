@@ -72,7 +72,7 @@ app/
 Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
 
 ---
-## 🚦 VPNni Aniqlash Funktsiyasi
+## 🚦 `vpnniAniqlash()` Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmada **VPN ulanishi mavjud yoki yo‘qligini** aniqlash uchun ishlatiladi.  
 Agar qurilmada faol VPN ulanishi mavjud bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
@@ -81,7 +81,23 @@ Agar qurilmada faol VPN ulanishi mavjud bo‘lsa, funksiya `true` qiymat qaytara
 > Foydalanuvchiga ogohlantiruvchi xabar berish va ilovani ishlashini to‘xtatish yoki yopish tavsiya etiladi.
 
 **Eslatma:** Funksiya ishlashi uchun internetga ruxsat kerak.
+#
 
+### 💻 Foydalanish namunasi
+
+Quyidagi kod `BaseActivity` klassida `onResume()` ichida `vpnniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
+
+```kotlin
+  override fun onResume() {
+        super.onResume()
+        val isVpn = lib.vpnniAniqlash()
+        if (isVpn) {
+            Toast.makeText(this, "Sizning qurulmangizda vpn aniqlandi", Toast.LENGTH_LONG).show()
+            finishAffinity()
+            System.exit(0)
+        }
+    }
+```
 ---
 
 ## 🧪 Emulyatorni Aniqlash Funktsiyasi
@@ -99,7 +115,23 @@ Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks 
 > finishAffinity() 
 > System.exit(0)  
 > ```
+#
 
+### 💻 Foydalanish namunasi
+
+Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
+
+```kotlin
+ override fun onResume() {
+        super.onResume()
+        val isEmulyator = lib.emulyatorniAniqlash(this)
+        if (isEmulyator) {
+            Toast.makeText(this, "Ilova emulyatorda ishga tushdi", Toast.LENGTH_LONG).show()
+            finishAffinity()
+            System.exit(0)
+        }
+    }
+```
 ---
 ## ⚠️ Rootni Aniqlash Funktsiyasi
 
@@ -116,7 +148,23 @@ Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda
 > finishAffinity() 
 > System.exit(0)  
 > ```
+#
 
+### 💻 Foydalanish namunasi
+
+Quyidagi kod `BaseActivity` klassida `onResume()` ichida `rootniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
+
+```kotlin
+ override fun onResume() {
+        super.onResume()
+        val isRoot = lib.rootniAniqlash()
+        if (isRoot) {
+            Toast.makeText(this, "Ilova root qurulmada ishga tushdi", Toast.LENGTH_LONG).show()
+            finishAffinity()
+            System.exit(0)
+        }
+    }
+```
 ---
 
 
