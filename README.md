@@ -74,7 +74,6 @@ Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda
 > Agar qurilma root qilingan bo‘lsa (`true` qaytsa), foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish kerak:
 >
 > ```kotlin
-> Toast.makeText(context, "Root qilingan qurilmada ilova ishlamaydi", Toast.LENGTH_LONG).show()
 > finishAffinity() 
 > System.exit(0)  
 > ```
