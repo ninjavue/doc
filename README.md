@@ -8,4 +8,15 @@ loyihangizga qo‘shilgan bo‘ladi.
 settings.gradle.kts faylini oching, dependencyResolutionManagement bo'limidagi repositories qismiga libs papkasining joylashuvini
 ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi va
 ulaydi. Masalan: 
-<pre lang="md"> <code>```kotlin dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS) repositories { google() mavenCentral() flatDir{ dirs("app/libs") } } } ```</code> </pre>
+<pre lang="md"> <code>```
+  dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        flatDir{
+            dirs("app/libs")
+        }
+    }
+}
+  ```</code> </pre>
