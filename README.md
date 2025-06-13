@@ -277,7 +277,7 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `rootniAniqlash()` funk
     }
 ```
 ---
-## ⚠️ `playMarketniAniqlash()` Funktsiyasi
+## 🛡️ `playMarketniAniqlash()` Funktsiyasi
 
 Ushbu funksiya ilova Play Market orqali o‘rnatilganligini aniqlash uchun ishlatiladi. Agar ilova boshqa manbadan (masalan .apk orqali qo‘lda) o‘rnatilgan bo‘lsa, bu xavfsizlikka tahdid solishi mumkin.
 
@@ -304,6 +304,35 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `playMarketniAniqlash()
         System.exit(0)
     }
 }
+```
+---
+## 🛡️ `imzoAniqlash()` Funktsiyasi
+
+imzoAniqlash() funksiyasi ilovaning ruxsatsiz yoki o‘zgartirilgan APK emasligini aniqlash uchun mo‘ljallangan. U ilovaning imzosini tekshiradi va agar u original imzo bilan mos tushmasa, false qiymat qaytaradi.
+
+> ✅ **Eslatma:**  
+> Agar ilova Imzosi xato bo‘lsa (`false` qaytsa), foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish kerak:
+>
+> ```kotlin
+> finishAffinity() 
+> System.exit(0)  
+> ```
+#
+
+### 💻 Foydalanish namunasi
+
+Quyidagi kod `BaseActivity` klassida `onResume()` ichida `imzoAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
+
+```kotlin
+ override fun onResume() {
+        super.onResume()
+        val isSignature = lib.imzoAniqlash(this)
+        if (!isSignature) {
+            Toast.makeText(this, "Ilova imzosi xato!", Toast.LENGTH_LONG).show()
+            finishAffinity()
+            System.exit(0)
+        }
+    }
 ```
 ---
 
