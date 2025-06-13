@@ -277,6 +277,36 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `rootniAniqlash()` funk
     }
 ```
 ---
+## ⚠️ `playMarketniAniqlash()` Funktsiyasi
+
+Ushbu funksiya ilova Play Market orqali o‘rnatilganligini aniqlash uchun ishlatiladi. Agar ilova boshqa manbadan (masalan .apk orqali qo‘lda) o‘rnatilgan bo‘lsa, bu xavfsizlikka tahdid solishi mumkin.
+
+> ✅ **Eslatma:**  
+> Agar ilova Play Marketdan yuklanmagan bo‘lsa (`false` qaytsa), foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish kerak:
+>
+> ```kotlin
+> finishAffinity() 
+> System.exit(0)  
+> ```
+#
+
+### 💻 Foydalanish namunasi
+
+Quyidagi kod `BaseActivity` klassida `onResume()` ichida `playMarketniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
+
+```kotlin
+ override fun onResume() {
+    super.onResume()
+    val isPlayMarket = lib.playMarketniAniqlash(this)
+    if (!isPlayMarket) {
+        Toast.makeText(this, "Iltimos ilovani Play Marketdan yuklab oling", Toast.LENGTH_LONG).show()
+        finishAffinity()
+        System.exit(0)
+    }
+}
+```
+---
+
 
 
 
