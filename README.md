@@ -306,7 +306,7 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `playMarketniAniqlash()
 }
 ```
 ---
-## 🛡️ `imzoAniqlash()` Funktsiyasi
+## ✍️ `imzoAniqlash()` Funktsiyasi
 
 imzoAniqlash() funksiyasi ilovaning ruxsatsiz yoki o‘zgartirilgan APK emasligini aniqlash uchun mo‘ljallangan. U ilovaning imzosini tekshiradi va agar u original imzo bilan mos tushmasa, false qiymat qaytaradi.
 
