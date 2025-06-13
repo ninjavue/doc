@@ -34,7 +34,10 @@ Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massa
 
 #vpnniAniqlash Funksiyasi
 test vpn
+
 #emulyatorniAniqlash Funksiyasi
 test emulyator
+
 #rootniAniqlash Funksiyasi
 test root
+
