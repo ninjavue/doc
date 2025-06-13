@@ -62,8 +62,6 @@ Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks 
 > ```
 
 ---
-
----
 ## ⚠️ Rootni Aniqlash Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
