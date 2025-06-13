@@ -335,7 +335,7 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `imzoAniqlash()` funksi
     }
 ```
 ---
-### 📡 `malumotOlish()` funksiyasi
+## 📡 `malumotOlish()` Funksiyasi
 
 `malumotOlish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya AES yordamida shifrlangan `data.enc` faylidagi domen, path va boshqa parametrlar asosida HTTP so‘rov yuboradi.
 
