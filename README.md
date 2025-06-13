@@ -50,6 +50,19 @@ Agar qurilmada faol VPN ulanishi mavjud bo‘lsa, funksiya `true` qiymat qaytara
 Ushbu funksiya ilova ishga tushgan qurilmaning **emulyator (soxta qurilma)** ekanligini aniqlash uchun mo‘ljallangan.  
 Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks holda emulyator aniqlansa `true` qiymat qaytaradi.
 
+> ⚠️ **Emulyatorda ishlayotgan ilova xavfsizlik jihatidan ishonchsiz hisoblanadi.**  
+> Bu holatda ilova buzilishi, teskari tahlil (reverse engineering) qilinishi yoki yolg‘on ma’lumotlar bilan test qilinishi mumkin.
+
+> ✅ **Tavsiya:**  
+> Agar emulyator aniqlansa, foydalanuvchiga ogohlantiruvchi xabar chiqaring va ilovani yopish uchun quyidagi funksiyalardan foydalaning:
+>
+> ```kotlin
+> finishAffinity() // barcha aktivitilarni yopadi
+> System.exit(0)   // dasturdan chiqadi
+> ```
+
+---
+
 ---
 
 ## ⚠️ Rootni Aniqlash Funktsiyasi
