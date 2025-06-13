@@ -41,7 +41,7 @@ Funksiyani chaqirish orqali kutubxona ichida joylashgan faylga to‘g‘ridan-to
 
 ---
 
-### 🧑‍💻 Foydalanish namunasi
+### 💻 Foydalanish namunasi
 
 Quyidagi kod `BaseActivity` klassida `onCreate()` ichida `faylManzili()` funksiyasini qanday chaqirishni ko‘rsatadi:
 
@@ -70,14 +70,6 @@ app/
 ```
 
 Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
-
----
-
-### ✅ Tavsiya
-
-- Fayl nomini to‘g‘ri ko‘rsating va `assets.open("fayl_nomi")` usulidan foydalaning.
-- Fayl o‘qishdagi xatoliklarni `try-catch` bilan ushlash xavfsizroq bo‘ladi.
-- Ilova ishga tushganda birinchi marta sozlashlar (config, token, URL va h.k.) shu tarzda yuklanishi mumkin.
 
 #
 ## 🚦 VPNni Aniqlash Funktsiyasi
