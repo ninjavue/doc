@@ -31,6 +31,32 @@ Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massa
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
+---
+## 🔐 Ma'lumotlarni Shifrlash
+#
+### ✨ Nima uchun shifrlash zarur?
+
+Ilovada ishlatiladigan ba'zi muhim ma'lumotlar — masalan, **backend server URL’lari**, **directory manzillar**, **tokenlar**, **hash qiymatlar**, va **ilovaning imzo (signature) ma'lumotlari** — maxfiy va xavfsizlik talablariga javob beruvchi shaklda saqlanishi kerak.
+
+Agar bu ma’lumotlar shifrlanmagan holda apk ichida yoki fayl tizimida saqlansa, ular tahlil qilinib (reverse engineering), ilovaga hujum qilish, soxta so‘rov yuborish yoki serverdan noto‘g‘ri foydalanish uchun ishlatilishi mumkin.
+
+Shuning uchun **shifrlash yordamida bu ma’lumotlarni himoyalash** va ularni faqat kerakli paytda, kerakli joyda yechib olish (deshifrovka qilish) lozim bo‘ladi.
+
+#
+
+### 🔒 Shifrlanadigan ma’lumotlar
+- 🌐 Backend URL manzillari  
+- 📁 Server path / directory strukturalari  
+- 🔑 API tokenlar, maxfiy kalitlar  
+- 🧮 Hashlangan qiymatlar (masalan, SHA256)  
+- 🖋 Ilovaning imzo sertifikati (signature)  
+
+#
+
+### 📌 Shifrlash va foydalanish ketma-ketligi
+
+---
+
 
 ## 📁 `faylManzili()` Funksiyasi
 
