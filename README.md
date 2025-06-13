@@ -57,8 +57,8 @@ Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks 
 > Agar emulyator aniqlansa, foydalanuvchiga ogohlantiruvchi xabar chiqaring va ilovani yopish uchun quyidagi funksiyalardan foydalaning:
 >
 > ```kotlin
-> finishAffinity() // barcha aktivitilarni yopadi
-> System.exit(0)   // dasturdan chiqadi
+> finishAffinity() 
+> System.exit(0)  
 > ```
 
 ---
@@ -75,8 +75,8 @@ Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda
 >
 > ```kotlin
 > Toast.makeText(context, "Root qilingan qurilmada ilova ishlamaydi", Toast.LENGTH_LONG).show()
-> finishAffinity() // ilovani yopish
-> System.exit(0)   // ilovani to‘liq to‘xtatish
+> finishAffinity() 
+> System.exit(0)  
 > ```
 
 ---
