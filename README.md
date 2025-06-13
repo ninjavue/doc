@@ -335,6 +335,26 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `imzoAniqlash()` funksi
     }
 ```
 ---
+## 📡 `malumotOlish()` funksiyasi
+`malumotOlish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya AES yordamida shifrlangan `data.enc` faylidagi domen, path va boshqa parametrlar asosida HTTP so‘rov yuboradi.
+
+### ⚙️ Parametrlar
+
+| Parametr      | Turi             | Tavsif |
+|---------------|------------------|--------|
+| `domainIndex` | `Int`            | Domenlar ro‘yxatidan indeks (0 — birinchi domen). |
+| `pathIndex`   | `Int`            | Havolalar (`endpoint`) ro‘yxatidan indeks. |
+| `id`          | `String?`        | Qo‘shimcha identifikator (masalan: `12` → `/posts/12`). |
+| `method`      | `String`         | HTTP metod: `GET`, `POST`, `PUT`, `DELETE`. |
+| `headers`     | `Array<String>?` | Sarlavhalar (headers), ixtiyoriy. |
+| `body`        | `String?`        | JSON formatdagi so‘rov ma’lumotlari, ixtiyoriy. |
+
+### 🔁 Natija
+Funksiya `String` (odatda JSON) formatida javob qaytaradi. Uni `Gson` yordamida quyidagicha obyektga aylantirish mumkin:
+
+```kotlin
+val gson = Gson()
+val parsed = gson.fromJson(jsonString, GetResponse::class.java)
 
 
 
