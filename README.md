@@ -39,7 +39,7 @@ Funksiyani chaqirish orqali kutubxona ichida joylashgan faylga to‘g‘ridan-to
 
 > 📌 **Eslatma:** Faylga kirish uchun Android ilovasidagi `assets` obyektini funksiya ichiga uzatishingiz kerak.
 
----
+#
 
 ### 💻 Foydalanish namunasi
 
@@ -54,7 +54,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
----
+#
 
 ### 📂 Qayerdagi faylni o‘qiydi?
 
@@ -71,7 +71,7 @@ app/
 
 Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
 
-#
+---
 ## 🚦 VPNni Aniqlash Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmada **VPN ulanishi mavjud yoki yo‘qligini** aniqlash uchun ishlatiladi.  
