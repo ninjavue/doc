@@ -68,6 +68,78 @@ Birinchi bosqichda maxfiy ma'lumotlar `data.json` faylga quyidagi formatda yozil
     "imzo": "B83BC82F4E631114B79E5E01DB8590CAF76D3384B2CFCFEE27F31B0C886262B1"
 }
 ```
+### 🔑 2. AES-256 kalitni yaratish
+
+```bash
+openssl rand -base64 32 > aes.key
+```
+
+Bu buyruq orqali **256-bit AES kalit** yaratiladi va `base64` formatda `aes.key` faylga yoziladi.
+
+#
+
+### 🔎 3. AES kalitni hex (hash ko‘rinish) ga o‘tkazish
+
+```bash
+base64 -d aes.key | xxd -p -c 256
+```
+
+Natijada siz AES kalitni 64 ta belgidan iborat **hex formatdagi** qiymatini olasiz. Ushbu qiymat quyida `-K` parametriga qo‘shiladi.
+
+#
+
+### 🔐 4. JSON faylni AES-256-CBC bilan shifrlash
+
+```bash
+openssl enc -aes-256-cbc -in data.json -out data.enc -K <AES_KALIT_HEX_QIYMAT> -iv 00000000000000000000000000000000 -nosalt
+```
+
+> **Eslatma:**
+> - `-K` – yuqorida olingan hex AES kalit
+> - `-iv` – **o‘zgarmas** (fixed) IV qiymat: `00000000000000000000000000000000`
+> - `-nosalt` – deterministik natija olish uchun
+
+#
+
+### 🔄 5. AES kalitni **raw format**ga o‘tkazish
+
+```bash
+base64 -d aes.key > aes.raw
+```
+
+Bu qadamda `aes.key` ni raw ikkilamchi formatga o‘tkazasiz. Sababi, RSA bilan shifrlash uchun **real binar shakldagi** fayl kerak bo‘ladi.
+
+#
+
+### 🛡 6. RSA public kalit bilan AES kalitni shifrlash
+
+```bash
+openssl pkeyutl -encrypt -pubin -inkey public.pem -in aes.raw -out kalit.enc
+```
+
+Bu yerda:
+- `public.pem` – RSA ochiq kalit
+- `aes.raw` – AES kalitning binar ko‘rinishi
+- `kalit.enc` – **shifrlangan AES kalit**, bu `data.enc` ni yechish uchun kerak bo‘ladi.
+#
+
+### 📦 7. Fayllarni `assets/` papkaga joylash
+
+Quyidagi 2 faylni `assets/` ichiga joylashtiring:
+
+```
+app/src/main/assets/
+├── data.enc      ✅ Shifrlangan JSON
+└── kalit.enc     ✅ RSA bilan shifrlangan AES kalit
+```
+
+> ⚠️ **Eslatma:** Fayl nomlari **majburiy**: `data.enc` va `kalit.enc` bo‘lishi kerak. Kutubxona faqat shu nomlar orqali fayllarni qidiradi.
+
+
+### ❓ Nega `aes.key` ni `aes.raw` ga aylantirish kerak?
+
+`aes.key` fayli `base64` kodlangan ko‘rinishda saqlanadi. RSA shifrlash esa **faqatgina xom (raw) baytli fayllar** bilan ishlaydi. Shuning uchun `base64 -d` orqali uni `aes.raw` formatga aylantiramiz.
+
 ---
 
 
