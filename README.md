@@ -32,27 +32,32 @@ Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massa
     <uses-permission android:name="android.permission.INTERNET" />
 </code> </pre>
 #
-**#vpnniAniqlash Funksiyasi**
-Ushbu funksiya ilova ishga tushgan qurilmada VPN ulanishi mavjud yoki
-yo‘qligini aniqlash uchun ishlatiladi. Agar qurilmada faol VPN ulanishi mavjud
-bo‘lsa, funksiya true qiymat qaytaradi, aks holda false. VPN mavjudligi xavfsizlik
-talablariga zid bo‘lishi mumkin. Foydalanuvchiga ogohlantiruvchi xabar berish va
-ilovani ishlashini to‘xtatish yoki yopish tavsiya etiladi. Funksiya ishlashi uchun
-internetga ruxsat kerak.
+## 🚦 VPNni Aniqlash Funktsiyasi
 
-#
-**#emulyatorniAniqlash Funksiyasi**
-Ushbu funksiya ilova ishga tushgan qurilmaning emulyator (soxta qurilma)
-ekanligini aniqlash uchun mo‘ljallangan. Agar ilova real qurilmada ishlayotgan
-bo‘lsa, funksiya false qaytaradi, aks holda emulyator aniqlansa true qiymat
-qaytaradi.
+Ushbu funksiya ilova ishga tushgan qurilmada **VPN ulanishi mavjud yoki yo‘qligini** aniqlash uchun ishlatiladi.  
+Agar qurilmada faol VPN ulanishi mavjud bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
 
-#
-**#rootniAniqlash Funksiyasi**
-Ushbu funksiya ilova ishga tushgan qurilmaning root qilinganligini aniqlash
-uchun ishlatiladi. Agar qurilma root qilingan bo‘lsa, funksiya true qiymat qaytaradi,
-aks holda false. Agar funksiya true qiymat qaytarsa, bu qurilma xavfsizlik talablariga
-javob bermasligini bildiradi. Shuning uchun foydalanuvchiga ogohlantiruvchi xabar
-chiqarish tavsiya etiladi va ilovani darhol yopish kerak (finishAffinity() yoki
-System.exit(0) yordamida).
+> 🔒 **VPN mavjudligi xavfsizlik talablariga zid bo‘lishi mumkin.**  
+> Foydalanuvchiga ogohlantiruvchi xabar berish va ilovani ishlashini to‘xtatish yoki yopish tavsiya etiladi.
+
+**Eslatma:** Funksiya ishlashi uchun internetga ruxsat kerak.
+
+---
+
+## 🧪 Emulyatorni Aniqlash Funktsiyasi
+
+Ushbu funksiya ilova ishga tushgan qurilmaning **emulyator (soxta qurilma)** ekanligini aniqlash uchun mo‘ljallangan.  
+Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks holda emulyator aniqlansa `true` qiymat qaytaradi.
+
+---
+
+## ⚠️ Rootni Aniqlash Funktsiyasi
+
+Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
+Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
+
+> ⚠️ **Agar funksiya `true` qiymat qaytarsa, bu qurilma xavfsizlik talablariga javob bermasligini bildiradi.**  
+> Foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish tavsiya etiladi (`finishAffinity()` yoki `System.exit(0)` yordamida).
+
+
 
