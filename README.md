@@ -28,9 +28,10 @@ Bu kodni dasturingizga qo'shganingizdan keyin build.gradle.kts(app) faylni ichig
 </code> </pre>
 #
 Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massalan BaseActivity.java/.kt nomi bilan alohida umummiy Activitylar uchun ota(parent) class yaratib olishni bu orqali kod takrorlanish oldi olinadi. AndroidManifest.xml faylliga internet uchun ruxsat(permission) qo'shing.
-<pre lang="md"> <code> 
-    <uses-permission android:name="android.permission.INTERNET" />
-</code> </pre>
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
 #
 ## 🚦 VPNni Aniqlash Funktsiyasi
 
