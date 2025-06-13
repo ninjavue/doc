@@ -335,9 +335,22 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `imzoAniqlash()` funksi
     }
 ```
 ---
-## 📡 `malumotOlish()` funksiyasi
+### 📡 `malumotOlish()` funksiyasi
+
 `malumotOlish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya AES yordamida shifrlangan `data.enc` faylidagi domen, path va boshqa parametrlar asosida HTTP so‘rov yuboradi.
 
+## 🛡️ SSL Pinning
+
+> **SSL Pinning** vositasi orqali ilova faqat **ishonchli sertifikat** bilan ishlovchi serverga ulanadi. Bu orqali man-in-the-middle (MITM) hujumlarining oldi olinadi.
+
+**Server sertifikatidan hash olish:**
+
+```bash
+echo | openssl s_client -servername your_server_address -connect your_server_address:443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256 -binary | openssl enc -base64
+```
+> ✅ **Eslatma:**  
+> Olingan hash qiymat json faylidagi hashlar maydonida bo'lishi kerak aks holda serverga so'rov yuborilmaydi.
+>
 ### ⚙️ Parametrlar
 
 | Parametr      | Turi             | Tavsif |
