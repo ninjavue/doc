@@ -100,7 +100,7 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `vpnniAniqlash()` funks
 ```
 ---
 
-## 🧪 Emulyatorni Aniqlash Funktsiyasi
+## `emulyatorniAniqlash()` Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **emulyator (soxta qurilma)** ekanligini aniqlash uchun mo‘ljallangan.  
 Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks holda emulyator aniqlansa `true` qiymat qaytaradi.
@@ -133,7 +133,7 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()`
     }
 ```
 ---
-## ⚠️ Rootni Aniqlash Funktsiyasi
+## `rootniAniqlash()` Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
 Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
