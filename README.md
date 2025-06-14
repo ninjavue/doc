@@ -1,11 +1,8 @@
 # Zirh kutubxonasini ishlatish qo‘llanmasi
 Zirh kutubxonasidan foydalanishni boshlash uchun avvalo o'z loyihangizga
-ushbu kutubxonani qo'shishingiz kerak. Buning uchun loyihangizdagi app
-papkasining ichida yangi libs nomli papka yarating va unga .aar formatidagi
-Zirh kutubxona faylini joylashtiring. Shu tariqa kutubxona
-loyihangizga qo‘shilgan bo‘ladi.
+ushbu kutubxonani qo'shishingiz kerak.
 #
-`settings.gradle.kts` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qismiga libs papkasining joylashuvini
+`settings.gradle.kts` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qismiga kutubxonani jitpack orqali chaqirib olasiz
 ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi. Masalan: 
 ```kotlin
   dependencyResolutionManagement {
@@ -19,6 +16,11 @@ ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi. M
         }
     }
 }
+```
+#
+`.gradle/gradle.properies` fayliga quydagi kodni qo'shib qo'ying.
+```kotlin
+authToken=jp_uhvnfp5qnsucafao6b0hplsmvs
 ```
 #
 Bu kodni dasturingizga qo'shganingizdan keyin `build.gradle.kts(app)` faylni ichiga kutubxonani implementation qilib yozib qo'ying. Masalan:
