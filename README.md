@@ -28,7 +28,7 @@ Endi esa, `app` modulining `build.gradle.kts` faylida `dependencies` bo‘limiga
   }
 ```
 #
-Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massalan `BaseActivity.java/.kt` nomi bilan alohida umummiy Activitylar uchun ota(parent) class yaratib olishni bu orqali kod takrorlanish oldi olinadi. `AndroidManifest.xml` faylliga internet uchun ruxsat(permission) qo'shing.
+Zirh kutubxonasini loyihangizga ulab bo'lganingizdan so'ng, kod takrorlanishining oldini olish va strukturalashtirish maqsadida barcha `Activity`lar uchun umumiy ota klass yaratish tavsiya etiladi. Odatda bu klass `BaseActivity.kt` (yoki `.java`) deb nomlanadi. `AndroidManifest.xml` faylliga internet uchun ruxsat(permission) qo'shing.
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
