@@ -27,7 +27,7 @@ Bu kodni dasturingizga qo'shganingizdan keyin `build.gradle.kts(app)` faylni ich
   }
 ```
 #
-Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massalan BaseActivity.java/.kt nomi bilan alohida umummiy Activitylar uchun ota(parent) class yaratib olishni bu orqali kod takrorlanish oldi olinadi. `AndroidManifest.xml` faylliga internet uchun ruxsat(permission) qo'shing.
+Bu kodni yozib bo'lganingizdan keyin tafsiya etiladi asosiy Activity class massalan `BaseActivity.java/.kt` nomi bilan alohida umummiy Activitylar uchun ota(parent) class yaratib olishni bu orqali kod takrorlanish oldi olinadi. `AndroidManifest.xml` faylliga internet uchun ruxsat(permission) qo'shing.
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
