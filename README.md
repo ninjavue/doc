@@ -13,8 +13,9 @@ ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi. M
     repositories {
         google()
         mavenCentral()
-        flatDir{
-            dirs("app/libs")
+        maven {
+            url = uri("https://jitpack.io")
+            credentials.username = providers.gradleProperty("authToken").get()
         }
     }
 }
