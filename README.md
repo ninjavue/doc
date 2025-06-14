@@ -5,7 +5,7 @@ papkasining ichida yangi libs nomli papka yarating va unga .aar formatidagi
 Zirh kutubxona faylini joylashtiring. Shu tariqa kutubxona
 loyihangizga qo‘shilgan bo‘ladi.
 #
-`settings.gradle.kts` faylini oching, dependencyResolutionManagement bo'limidagi repositories qismiga libs papkasining joylashuvini
+`settings.gradle.kts` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qismiga libs papkasining joylashuvini
 ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi. Masalan: 
 ```kotlin
   dependencyResolutionManagement {
