@@ -24,7 +24,7 @@ ko'rsatishingiz kerak bo'ladi. Bu orqali loyiha kutubxonalarni to'g'ri topadi. M
 Bu kodni dasturingizga qo'shganingizdan keyin `build.gradle.kts(app)` faylni ichiga kutubxonani implementation qilib yozib qo'ying. Masalan:
 ```kotlin
   dependencies {
-    implementation(":zirhlib-release@aar")
+    implementation("com.github.XojiakbarJamoldinov:zirh-mobil-lib:v1.0.0")
   }
 ```
 #
