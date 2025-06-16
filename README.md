@@ -1,6 +1,7 @@
 # Zirh-mobil kutubxonasini ishlatish bo'yicha yo'riqnoma
 # Android
-Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
+
+Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Android loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
 ---
 # `jitpack.io`orqali kutubxonani ulash
 `jitpack.io` repozitoriyasiga ulanish uchun token kerak bo‘ladi. Buning uchun quyidagi qatorni `.gradle/gradle.properties` fayliga qo‘shing:
