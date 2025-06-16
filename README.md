@@ -336,21 +336,21 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()`
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
 
-<p><button>`Dashboard`</button></p>
-<p><button>`Statistics`</button></p>
-<p><button>`Publishing Overview`</button></p>
+`Dashboard`
+`Statistics`
+`Publishing Overview`
 
-<p><button>`Test and Release`</button></p>
+`Test and Release`
 
-<p><button>`Overview`</button></p>
-<p><button>`Device Catalog`</button></p>
+`Overview`
+`Device Catalog`
 
-<p><button>`Ratings and Reviews`</button></p>
-<p><button>`Android Vitals`</button></p>
-<p><button>`Policy and Programs`</button></p>
+`Ratings and Reviews`
+`Android Vitals`
+`Policy and Programs`
 
-<p><button>`Grow Users`</button></p>
-<p><button>`Monetize with Play`</button></p>
+`Grow Users`
+`Monetize with Play`
 
 
 
