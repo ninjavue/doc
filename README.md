@@ -1,6 +1,7 @@
 # Zirh kutubxonasini ishlatish bo‘yicha qo‘llanma
 Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
-## `jitpack.io`orqali kutubxonani ulash
+---
+# `jitpack.io`orqali kutubxonani ulash
 `jitpack.io` repozitoriyasiga ulanish uchun token kerak bo‘ladi. Buning uchun quyidagi qatorni `.gradle/gradle.properties` fayliga qo‘shing:
 ```kotlin
 authToken=jp_nk2513bvl6g5b8jjv1m0uckif2
@@ -55,7 +56,8 @@ authToken=jp_nk2513bvl6g5b8jjv1m0uckif2
   }
 ```
 # -->
-## `aar` fayl orqali kutubxonani ulash
+---
+# `aar` fayl orqali kutubxonani ulash
 `aar` faylni kutubxonaga qo'shish uchun loyihangizdagi `app` papkasining ichida yangi `libs` nomli papka yarating va unga `.aar` formatidagi
 Zirh kutubxona faylini joylashtiring.
 ```
@@ -64,7 +66,7 @@ app/
       └── zirh-mobil-lib-release.aar
 ```
 #
-##`settings.gradle` yoki `settings.gradle.kts` faylida `flatDir` sozlamasini yozing
+## `settings.gradle` yoki `settings.gradle.kts` faylida `flatDir` sozlamasini yozing
 ```kotlin
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -77,7 +79,7 @@ dependencyResolutionManagement {
     }
 }
 ```
-##`app` modulining `build.gradle` faylida kutubxonani ulash
+## `app` modulining `build.gradle` faylida kutubxonani ulash
 #
 ```kotlin
 dependencies {
