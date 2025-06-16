@@ -1,6 +1,6 @@
 # Zirh-mobil kutubxonasini ishlatish bo‘yicha yo'riqnoma
 # Android
-Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
+Zirh-mobile kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
 ---
 # `jitpack.io`orqali kutubxonani ulash
 `jitpack.io` repozitoriyasiga ulanish uchun token kerak bo‘ladi. Buning uchun quyidagi qatorni `.gradle/gradle.properties` fayliga qo‘shing:
@@ -84,7 +84,7 @@ dependencyResolutionManagement {
 #
 ```kotlin
 dependencies {
-    implementation(":zirhlib-release@aar")
+    implementation(":zirh-mobil-lib-release.aar")
 }
 ```
 > **Eslatma:**
@@ -206,9 +206,13 @@ Bu yerda:
 Quyidagi 2 faylni `assets/` ichiga joylashtiring:
 
 ```
-app/src/main/assets/
-├── data.enc      ✅ Shifrlangan JSON
-└── kalit.enc     ✅ RSA bilan shifrlangan AES kalit
+app/
+├── src/
+│   └── main/
+│       └── assets/
+|           └── data.enc ✅ Shifrlangan JSON
+│           └── kalit.enc ✅ RSA bilan shifrlangan AES kalit
+|            
 ```
 
 > ⚠️ **Eslatma:** Fayl nomlari **majburiy**: `data.enc` va `kalit.enc` bo‘lishi kerak. Kutubxona faqat shu nomlar orqali fayllarni qidiradi.
@@ -255,7 +259,9 @@ app/
 ├── src/
 │   └── main/
 │       └── assets/
-│           └── config.json
+|           └── data.enc
+│           └── kalit.enc
+|            
 ```
 
 Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
@@ -530,8 +536,10 @@ val parsed = gson.fromJson(jsonString, GetResponse::class.java)
         }
     }.start()
 ```
-# Zirh kutubxonasini ishlatish bo‘yicha qo‘llanma flutter uchun
-Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Flutter loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
+# Zirh-mobile kutubxonasini ishlatish bo‘yicha yo'riqnoma
+# Flutter
+
+Zirh-mobile kutubxonasidan foydalanishni boshlash uchun uni o‘z Flutter loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
 
 Flutter loyihamizni `android/app` papkani ichiga `libs` nomli kutubxona yaratib olamiz.
 
@@ -585,6 +593,18 @@ dependencies {
 Eslatma:
 
 Kutubxonaning nomi `.aar` fayl nomi bilan to'g'ri kelishi kerak `(zirhlib-debug.aar)`.
+Yuqorida ko'rsatilgan quyidagi 2 faylni `assets/` ichiga joylashtiring:
+
+```
+app/
+├── src/
+│   └── main/
+│       └── assets/
+|           └── data.enc ✅ Shifrlangan JSON
+│           └── kalit.enc ✅ RSA bilan shifrlangan AES kalit
+|            
+```
+
 
 `app/src/main/kotlin/.../MainActivity.kt` faylimizga `uz.zirh.zirhlib.ZirhMilliy` kutubxonani import qilib olamiz.
 ```dart
