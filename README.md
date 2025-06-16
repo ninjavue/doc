@@ -1,6 +1,10 @@
 # Zirh kutubxonasini ishlatish bo‘yicha qo‘llanma
 Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
 #
+---
+
+Interaktiv ko‘rinish uchun bu yerga o‘ting 👉 [Demo](https://zirh-doc.vercel.app)
+---
 `settings.gradle.kts` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qatoriga jitpack orqali manzilini qo‘shing: 
 ```kotlin
   dependencyResolutionManagement {
