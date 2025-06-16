@@ -335,28 +335,23 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()`
 ## ⚠️ `rootniAniqlash()` Funktsiyasi
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
-```
-[![Dashboard]
-[![Statistics]
-[![Publishing Overview]
 
-[![Test and Release]
+<p><button>Dashboard</button></p>
+<p><button>Statistics</button></p>
+<p><button>Publishing Overview</button></p>
 
-[![Overview]
-[![Device Catalog]
+<p><button>Test and Release</button></p>
 
-[![Ratings and Reviews]
+<p><button>Overview</button></p>
+<p><button>Device Catalog</button></p>
 
-[![Android Vitals]
+<p><button>Ratings and Reviews</button></p>
+<p><button>Android Vitals</button></p>
+<p><button>Policy and Programs</button></p>
 
-[![Policy and Programs]
+<p><button>Grow Users</button></p>
+<p><button>Monetize with Play</button></p>
 
----
-[![Grow Users]
-
----
-[![Monetize with Play]
-```
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
 Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
