@@ -335,7 +335,11 @@ Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash 
 Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
 
 > 🔐 **Root qilingan qurilma xavfsizlik talablariga javob bermaydi.**  
-> Bunday qurilmalarda foydalanuvchi yoki zararli dastur tizimga chuqur kirib, ilova ma’lumotlarini o‘zgartirishi yoki o‘g‘irlashi mumkin.
+> Bunday qurilmalar ilovalarning:
+>    Ilovaning ichki fayllari (token, ma’lumotlar bazasi) o'g'irlanishi mumkin.
+>    Ilova funksiyalari o'zgartirilishi yoki "buzilishi" mumkin (code injection).
+>    Trafik (token/parollar) kuzatilib, tahlil qilinadi.
+
 
 > ✅ **Eslatma:**  
 > Agar qurilma root qilingan bo‘lsa (`true` qaytsa), foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish kerak:
