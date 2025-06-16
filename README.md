@@ -565,8 +565,8 @@ Keyin esa libs papkani ichiga zirhlib-debug.aar kutubxonamizni joylashtirib olam
 flutter_project/
 ├── android/
 │   ├── app/
-│   │   ├── libs/                    ← 📂 Bu yerga .aar fayl qo‘yiladi
-│   │   │   └── zirhlib-debug.aar   ← 📦 JNI kutubxonani o‘z ichiga olgan .aar fayl
+│   │   ├── libs/                            ← 📂 Bu yerga .aar fayl qo‘yiladi
+│   │   │   └── zirh-mobil-lib-release.aar   ← 📦 JNI kutubxonani o‘z ichiga olgan .aar fayl
 │   │   ├── src/
 │   │   └── build.gradle.kts
 │   └── ...
@@ -588,12 +588,13 @@ repositories {
 app modulining build.gradle.kts faylida kutubxonani ulash
 ```
 dependencies {
-    implementation(files("libs/zirhlib-debug.aar"))
+    implementation(files("libs/zirh-mobil-lib-release.aar"))
 }
 ```
 Eslatma:
 
-Kutubxonaning nomi `.aar` fayl nomi bilan to'g'ri kelishi kerak `(zirhlib-debug.aar)`.
+Kutubxonaning nomi `.aar` fayl nomi bilan to'g'ri kelishi kerak `(zirh-mobil-lib-release.aar)`.
+
 Yuqorida ko'rsatilgan quyidagi 2 faylni `assets/` ichiga joylashtiring:
 
 ```
@@ -601,7 +602,7 @@ app/
 ├── src/
 │   └── main/
 │       └── assets/
-|           └── data.enc ✅ Shifrlangan JSON
+|           └── data.enc  ✅ Shifrlangan JSON
 │           └── kalit.enc ✅ RSA bilan shifrlangan AES kalit
 |            
 ```
