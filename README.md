@@ -273,8 +273,9 @@ Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumk
 Ushbu funksiya ilova ishga tushgan qurilmada **VPN ulanishi mavjud yoki yo‘qligini** aniqlash uchun ishlatiladi.  
 Agar qurilmada faol VPN ulanishi mavjud bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
 
-> 🔒 **VPN mavjudligi xavfsizlik talablariga zid bo‘lishi mumkin.**  
-> Foydalanuvchiga ogohlantiruvchi xabar berish va ilovani ishlashini to‘xtatish yoki yopish tavsiya etiladi.
+> 🔒 **VPN mavjudligi xavfsizlik talablariga zid bo‘lishi mumkin.**
+> VPN orqali foydalanuvchi o'z IP manzilini yashirishi, trafikni ushlab tahlil qilishi (MITM) va xavfsizlikni chetlab o'tuvchi vositalardan foydalanishi mumkin. 
+> Bunday hollarda foydalanuvchiga ogohlantiruvchi xabar berish va ilovani ishlashini to‘xtatish yoki yopish tavsiya etiladi.
 
 **Eslatma:** Funksiya ishlashi uchun internetga ruxsat kerak.
 #
