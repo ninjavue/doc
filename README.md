@@ -1,4 +1,4 @@
-# Zirh mobil kutubxonasini ishlatish bo`yicha yo`riqnoma
+# Zirh-mobil kutubxonasini ishlatish bo`yicha yo`riqnoma
 # Android
 
 Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Android loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
