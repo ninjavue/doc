@@ -336,22 +336,45 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()`
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
 
-## 📱 Google Play Console Bo'limlari
+## 📊 Google Play Console Bo'limlari
+
+### 🧭 Asosiy
+[![Dashboard]
+[![Statistics]
+[![Publishing Overview]
+
+---
 
 ### 🚀 Test va chiqarish
-[![Test and release](https://img.shields.io/badge/Test%20and%20Release-Click-blue?style=for-the-badge)](#)
+[![Test and Release]
 
-### 📈 Monitoring va yaxshilash
-[![Reach and Devices](https://img.shields.io/badge/Reach%20and%20Devices-Click-lightgrey?style=for-the-badge)](#)  
-[![Ratings and Reviews](https://img.shields.io/badge/Ratings%20and%20Reviews-Click-lightgrey?style=for-the-badge)](#)  
-[![Android Vitals](https://img.shields.io/badge/Android%20Vitals-Click-lightgrey?style=for-the-badge)](#)  
-[![Policy and Programs](https://img.shields.io/badge/Policy%20and%20Programs-Click-lightgrey?style=for-the-badge)](#)
+---
 
-### 🚀 Foydalanuvchilarni oshirish
-[![Grow Users](https://img.shields.io/badge/Grow%20Users-Click-green?style=for-the-badge)](#)
+### 🛠 Monitor va yaxshilash
 
-### 💰 Play orqali monetizatsiya
-[![Monetize with Play](https://img.shields.io/badge/Monetize%20with%20Play-Click-yellow?style=for-the-badge)](#)
+#### 📡 Reach and Devices
+[![Overview]
+[![Device Catalog]
+
+#### ⭐ Ratings and Reviews
+[![Ratings and Reviews]
+
+#### 📊 Android Vitals
+[![Android Vitals]
+
+#### 📋 Policy and Programs
+[![Policy and Programs]
+
+---
+
+### 📈 Foydalanuvchilarni oshirish
+[![Grow Users]
+
+---
+
+### 💵 Play orqali monetizatsiya
+[![Monetize with Play]
+
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
 Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
