@@ -336,23 +336,25 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()`
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
 
-`Dashboard`<br/>
-`Statistics`<br/>
-`Publishing Overview`<br/>
-
-`Test and Release`<br/>
-
-`Overview`<br/>
-`Device Catalog`<br/>
-
-`Ratings and Reviews`<br/>
-`Android Vitals`<br/>
-`Policy and Programs`<br/>
-
-`Grow Users`<br/>
-`Monetize with Play`<br/>
-
-
+```
+Dashboard
+Statistics
+Publishing overview
+Test and release
+Monitor and improve
+│   └── Reach and devices
+│          └── Overview
+│          └── Device catalog
+│  └── Ratings and reviews
+│  └── Android vitals
+│  └── Policy and programs
+```
+`Monitor and improve` bo'limini tanlang va uni ichidan `Reach and devices` ni tanlang va `Device catalog` ni tanlang buyerda ochilgan oynadan o'ng tomon yuqorida `Manage exclusion rules` ni bosing va Play Integrity qismidan Configure bo'limini tanlang keyin sizda `Store listing visibility` oynasi ochiladi bu yerda sizga 4 ta bo'lim:
+- No integrity checks
+- Basic integrity checks
+- Device integrity checks
+- Strong integrity checks
+Bu bo'limlarda siz `Device integrity checks` yoki `Strong integrity checks` ni tanlab qo'yishingiz zarur bu root qilingan va haqiqiyligi yo'qolgan ilovalarga play marketdan ilova chiqmaydi.
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
 Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
