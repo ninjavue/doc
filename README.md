@@ -538,8 +538,8 @@ Flutter loyihamizni android/app papkani ichiga lib nomli kutubxona yaratib olami
 flutter_project/
 ├── android/
 │   ├── app/
-│   │   ├── libs/                ← 📂 Bu yerga .aar fayl joylanadi
-│   │   │   └── zirhlib-debug.aar   ← 📦 JNI kutubxona (.aar formatda)
+│   │   ├── libs/               
+│   │   │  
 │   │   ├── src/
 │   │   └── build.gradle.kts
 │   ├── build.gradle.kts
@@ -584,6 +584,73 @@ dependencies {
 Eslatma:
 
 Kutubxonaning nomi .aar fayl nomi bilan to'g'ri kelishi kerak (zirhlib-debug.aar).
+
+app/src/main/kotlin/.../MainActivity.kt faylimizga uz.zirh.zirhlib.ZirhMilliy kutubxonani import qilib olamiz.
+```
+package <package nomi>
+
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
+...
+import uz.zirh.zirhlib.ZirhMilliy
+```
+MethodChannelda kutubxona funksiyalaridan biridan foydalanish usuli.
+```
+class MainActivity : FlutterActivity() {
+
+    private val CHANNEL = "com.example.zirh/root" /// com.exampe.zirh/root -> bu bizda kanal nomi yani kutubxonaga murojaat qilish uchun
+
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "rootlikkatekshirish" -> {
+                    try {
+                        val isRooted = ZirhMilliy().rootniAniqlash()
+                        result.success(isRooted)
+                    } catch (e: Exception) {
+                        result.error("JNI_ERROR", "Failed to call native rootniAniqlash", e.message)
+                    }
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+        }
+    }
+}
+```
+
+app/src/main/kotlin/.../MainActivity.kt faylimizning eng pastki qismiga quyidagicha kutubxonani yuklab olish funksiyasini kiritib qo'yamiz.
+
+```
+companion object {
+        init {
+            System.loadLibrary("mobil") // ← .so kutubxonangiz nomi (masalan, libzirh.so bo‘lsa "zirh" yoziladi)
+        }
+    }
+```
+Endi flutter uchun bridge.dart yaratib olamiz. bridge.dart orqali biz flutter loyihamizda istalgan fayl koddan turib foydalanish imkonini beradi.
+```
+import 'package:flutter/services.dart';
+
+class ZirhMilliyNativeBridge {
+  static const _channel = MethodChannel('com.example.zirh/root'); /// kanal nomi berilishi lozim
+
+  static Future<bool> rootniAniqlash() async {
+    try {
+      final bool? result = await _channel.invokeMethod<bool>('rootlikkatekshirish');
+      return result ?? false;
+    } on PlatformException catch (e) {
+      print('JNI method error: ${e.message}');
+      return false;
+    }
+  }
+}
+
+```
 
 
 
