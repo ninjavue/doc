@@ -351,6 +351,8 @@ Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketl
 
 <p><button>Grow Users</button></p>
 <p><button>Monetize with Play</button></p>
+<p><a href="#"><button style="all: unset; background-color: #007bff; color: white; padding: 8px 16px; border-radius: 5px; border: none;">Dashboard</button></a></p>
+<p><a href="#"><button style="all: unset; background-color: #007bff; color: white; padding: 8px 16px; border-radius: 5px; border: none;">Statistics</button></a></p>
 
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
