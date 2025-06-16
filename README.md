@@ -536,10 +536,10 @@ val parsed = gson.fromJson(jsonString, GetResponse::class.java)
         }
     }.start()
 ```
-# Zirh-mobile kutubxonasini ishlatish bo‘yicha yo'riqnoma
+# Zirh-mobile kutubxonasini ishlatish bo'yicha yo'riqnoma
 # Flutter
 
-Zirh-mobile kutubxonasidan foydalanishni boshlash uchun uni o‘z Flutter loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
+Zirh-mobile kutubxonasidan foydalanishni boshlash uchun uni o'z Flutter loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
 
 Flutter loyihamizni `android/app` papkani ichiga `libs` nomli kutubxona yaratib olamiz.
 
