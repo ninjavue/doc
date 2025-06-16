@@ -532,7 +532,7 @@ val parsed = gson.fromJson(jsonString, GetResponse::class.java)
 # Zirh kutubxonasini ishlatish bo‘yicha qo‘llanma flutter uchun
 Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Flutter loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
 
-Flutter loyihamizni android/app papkani ichiga lib nomli kutubxona yaratib olamiz.
+Flutter loyihamizni `android/app` papkani ichiga `libs` nomli kutubxona yaratib olamiz.
 
 ```
 flutter_project/
@@ -564,7 +564,7 @@ flutter_project/
 ├── pubspec.yaml
 └── ...
 ```
-settings.gradle.kts faylida flatDir sozlamasini yozing
+`settings.gradle.kts` faylida `flatDir` sozlamasini yozing
 ```
 repositories {
         google()
@@ -583,9 +583,9 @@ dependencies {
 ```
 Eslatma:
 
-Kutubxonaning nomi .aar fayl nomi bilan to'g'ri kelishi kerak (zirhlib-debug.aar).
+Kutubxonaning nomi `.aar` fayl nomi bilan to'g'ri kelishi kerak `(zirhlib-debug.aar)`.
 
-app/src/main/kotlin/.../MainActivity.kt faylimizga uz.zirh.zirhlib.ZirhMilliy kutubxonani import qilib olamiz.
+`app/src/main/kotlin/.../MainActivity.kt` faylimizga `uz.zirh.zirhlib.ZirhMilliy` kutubxonani import qilib olamiz.
 ```dart
 package <package nomi>
 
@@ -595,7 +595,7 @@ import io.flutter.plugin.common.MethodChannel
 ...
 import uz.zirh.zirhlib.ZirhMilliy
 ```
-MethodChannelda kutubxona funksiyalaridan biridan foydalanish usuli.
+`MethodChannel`da kutubxona funksiyalaridan biridan foydalanish usuli.
 ```dart
 class MainActivity : FlutterActivity() {
 
@@ -623,7 +623,7 @@ class MainActivity : FlutterActivity() {
 }
 ```
 
-app/src/main/kotlin/.../MainActivity.kt faylimizning eng pastki qismiga quyidagicha kutubxonani yuklab olish funksiyasini kiritib qo'yamiz.
+`app/src/main/kotlin/.../MainActivity.kt` faylimizning eng pastki qismiga quyidagicha kutubxonani yuklab olish funksiyasini kiritib qo'yamiz.
 
 ```dart
 companion object {
@@ -632,7 +632,7 @@ companion object {
         }
     }
 ```
-Endi flutter uchun bridge.dart yaratib olamiz. bridge.dart orqali biz flutter loyihamizda istalgan fayl koddan turib foydalanish imkonini beradi.
+Endi flutter uchun `bridge.dart` yaratib olamiz. bridge.dart orqali biz flutter loyihamizda istalgan fayl koddan turib foydalanish imkonini beradi.
 ```dart
 import 'package:flutter/services.dart';
 
