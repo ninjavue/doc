@@ -301,8 +301,8 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `vpnniAniqlash()` funks
 Ushbu funksiya ilova ishga tushgan qurilmaning **emulyator (soxta qurilma)** ekanligini aniqlash uchun mo‘ljallangan.  
 Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks holda emulyator aniqlansa `true` qiymat qaytaradi.
 
-> ⚠️ **Emulyatorda ishlayotgan ilova xavfsizlik jihatidan ishonchsiz hisoblanadi.**  
-> Bu holatda ilova buzilishi, teskari tahlil (reverse engineering) qilinishi yoki yolg‘on ma’lumotlar bilan test qilinishi mumkin.
+> ⚠️ **Emulyator (simulyator)da ishlayotgan ilova xavfsizlik nuqtai nazaridan ishonchsiz hisoblanadi.**  
+> Emulyator yordamida ilovaning serverga yuborayotgan va qabul qilayotgan ma'lumotlari tahlil qilinib, maxfiy ma’lumotlar ko'rish mumkin.
 
 > ✅ **Eslatma:**  
 > Agar emulyator aniqlansa, foydalanuvchiga ogohlantiruvchi xabar chiqaring va ilovani yopish uchun quyidagi funksiyalardan foydalaning:
