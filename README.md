@@ -335,7 +335,7 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()`
 ## ⚠️ `rootniAniqlash()` Funktsiyasi
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
-```
+
 ## 📱 Google Play Console Bo'limlari
 
 ### 🚀 Test va chiqarish
@@ -353,7 +353,6 @@ Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketl
 ### 💰 Play orqali monetizatsiya
 [![Monetize with Play](https://img.shields.io/badge/Monetize%20with%20Play-Click-yellow?style=for-the-badge)](#)
 
-```
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
 Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
 
