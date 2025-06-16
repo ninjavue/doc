@@ -1,7 +1,7 @@
 # Zirh kutubxonasini ishlatish bo‘yicha qo‘llanma
 Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
 #
-## `gradle.kts` 
+## `gradle.kts` orqali ulash
 `settings.gradle.kts` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qatoriga jitpack orqali manzilini qo‘shing: 
 ```kotlin
   dependencyResolutionManagement {
@@ -16,7 +16,7 @@ Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga 
     }
 }
 ```
-## `gradle` 
+## `gradle` orqali ulash
 `settings.gradle` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qatoriga jitpack orqali manzilini qo‘shing: 
 ```kotlin
   dependencyResolutionManagement {
@@ -36,7 +36,7 @@ Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga 
 ```kotlin
 authToken=jp_nk2513bvl6g5b8jjv1m0uckif2
 ```
-## `maven` 
+## `maven` orqali ulash
 ```kotlin
  <settings>
   <servers>
@@ -49,13 +49,13 @@ authToken=jp_nk2513bvl6g5b8jjv1m0uckif2
 </settings>
 ```
 #
-Endi esa, `app` modulining `build.gradle.kts` faylida `dependencies` bo‘limiga quyidagicha yozing:
+<!--Endi esa, `app` modulining `build.gradle.kts` faylida `dependencies` bo‘limiga quyidagicha yozing:
 ```kotlin
   dependencies {
     implementation("com.github.XojiakbarJamoldinov:zirh-mobil-lib:v1.0.0")
   }
 ```
-#
+# -->
 Zirh kutubxonasini loyihangizga ulab bo'lganingizdan so'ng, kod takrorlanishining oldini olish va strukturalashtirish maqsadida barcha `Activity`lar uchun umumiy ota klass yaratish tavsiya etiladi. Odatda bu klass `BaseActivity.kt` (yoki `.java`) deb nomlanadi.Bu klass kutubxonani boshlang'ich sozlash (initializatsiya) uchun xizmat qiladi.
 Quyidagi kabi `BaseActivity.kt` faylini yarating:
 ```kotlin
