@@ -336,23 +336,22 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()`
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
 
-<p><button>Dashboard</button></p>
-<p><button>Statistics</button></p>
-<p><button>Publishing Overview</button></p>
+<p><button>`Dashboard`</button></p>
+<p><button>`Statistics`</button></p>
+<p><button>`Publishing Overview`</button></p>
 
-<p><button>Test and Release</button></p>
+<p><button>`Test and Release`</button></p>
 
-<p><button>Overview</button></p>
-<p><button>Device Catalog</button></p>
+<p><button>`Overview`</button></p>
+<p><button>`Device Catalog`</button></p>
 
-<p><button>Ratings and Reviews</button></p>
-<p><button>Android Vitals</button></p>
-<p><button>Policy and Programs</button></p>
+<p><button>`Ratings and Reviews`</button></p>
+<p><button>`Android Vitals`</button></p>
+<p><button>`Policy and Programs`</button></p>
 
-<p><button>Grow Users</button></p>
-<p><button>Monetize with Play</button></p>
-<p><a href="#"><button style="all: unset; background-color: #007bff; color: white; padding: 8px 16px; border-radius: 5px; border: none;">Dashboard</button></a></p>
-<p><a href="#"><button style="all: unset; background-color: #007bff; color: white; padding: 8px 16px; border-radius: 5px; border: none;">Statistics</button></a></p>
+<p><button>`Grow Users`</button></p>
+<p><button>`Monetize with Play`</button></p>
+
 
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
