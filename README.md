@@ -1,4 +1,8 @@
 # Zirh-mobil kutubxonasini ishlatish bo'yicha yo'riqnoma
+---
+[![Android]([https://img.shields.io/badge/Dashboard-Click-blue?style=for-the-badge](https://github.com/ninjavue/doc/blob/main/README.md))](#)  
+[![Flutter]([https://img.shields.io/badge/Statistics-Click-blue?style=for-the-badge](https://github.com/ninjavue/doc/blob/main/flutter.md))](#)  
+---
 # Android
 
 Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Android loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
