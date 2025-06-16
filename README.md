@@ -534,26 +534,24 @@ Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Flutter loyihangizga 
 
 Flutter loyihamizni android/app papkani ichiga lib nomli kutubxona yaratib olamiz.
 
+```
 flutter_project/
 ├── android/
 │   ├── app/
-│   │   ├── libs/                
-│   │   │   
-│   │   │   
-│   │   │  
-│   │   │  
-│   │   │  
-│   │   │       
+│   │   ├── libs/                ← 📂 Bu yerga .aar fayl joylanadi
+│   │   │   └── zirhlib-debug.aar   ← 📦 JNI kutubxona (.aar formatda)
 │   │   ├── src/
-│   │   └── build.gradle
+│   │   └── build.gradle.kts
 │   ├── build.gradle.kts
 │   └── ...
 ├── lib/
 ├── pubspec.yaml
 └── ...
 
-Keyin esa libs papkani ichiga zirhlib-debug.aar kutubxonamizni joylashtirib olamiz
+```
 
+Keyin esa libs papkani ichiga zirhlib-debug.aar kutubxonamizni joylashtirib olamiz
+```
 flutter_project/
 ├── android/
 │   ├── app/
@@ -565,8 +563,9 @@ flutter_project/
 ├── lib/
 ├── pubspec.yaml
 └── ...
-
+```
 settings.gradle.kts faylida flatDir sozlamasini yozing
+```
 repositories {
         google()
         mavenCentral()
@@ -575,11 +574,13 @@ repositories {
             dirs("app/libs")
         }
     }
-
+```
 app modulining build.gradle.kts faylida kutubxonani ulash
+```
 dependencies {
     implementation(files("libs/zirhlib-debug.aar"))
 }
+```
 Eslatma:
 
 Kutubxonaning nomi .aar fayl nomi bilan to'g'ri kelishi kerak (zirhlib-debug.aar).
