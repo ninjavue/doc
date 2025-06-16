@@ -354,6 +354,7 @@ Monitor and improve
 - Basic integrity checks
 - Device integrity checks
 - Strong integrity checks
+
 Bu bo'limlarda siz `Device integrity checks` yoki `Strong integrity checks` ni tanlab qo'yishingiz zarur bu root qilingan va haqiqiyligi yo'qolgan ilovalarga play marketdan ilova chiqmaydi.
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
