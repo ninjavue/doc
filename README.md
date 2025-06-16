@@ -64,6 +64,29 @@ app/
       └── zirh-mobil-lib-release.aar
 ```
 #
+##`settings.gradle` yoki `settings.gradle.kts` faylida `flatDir` sozlamasini yozing
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        flatDir{
+            dirs("app/libs")
+        }
+    }
+}
+```
+##`app` modulining `build.gradle` faylida kutubxonani ulash
+#
+```kotlin
+dependencies {
+    implementation(":zirhlib-release@aar")
+}
+```
+> **Eslatma:**
+> - Kutubxonaning nomi `.aar` fayl nomi bilan to‘g‘ri kelishi kerak `(zirh-mobil-lib-release.aar)`.
+#
 Zirh kutubxonasini loyihangizga ulab bo'lganingizdan so'ng, kod takrorlanishining oldini olish va strukturalashtirish maqsadida barcha `Activity`lar uchun umumiy ota klass yaratish tavsiya etiladi. Odatda bu klass `BaseActivity.kt` (yoki `.java`) deb nomlanadi.Bu klass kutubxonani boshlang'ich sozlash (initializatsiya) uchun xizmat qiladi.
 Quyidagi kabi `BaseActivity.kt` faylini yarating:
 ```kotlin
