@@ -1,7 +1,8 @@
 # Zirh-mobil kutubxonasini ishlatish bo'yicha yo'riqnoma
 ---
-[![Android]([https://img.shields.io/badge/Dashboard-Click-blue?style=for-the-badge](https://github.com/ninjavue/doc/blob/main/README.md))](#)  
-[![Flutter]([https://img.shields.io/badge/Statistics-Click-blue?style=for-the-badge](https://github.com/ninjavue/doc/blob/main/flutter.md))](#)  
+[![Android](https://img.shields.io/badge/Android-blue?style=for-the-badge)](https://github.com/ninjavue/doc/blob/main/README.md)
+[![Flutter](https://img.shields.io/badge/Flutter-blue?style=for-the-badge)](https://github.com/ninjavue/doc/blob/main/flutter.md)
+
 ---
 # Android
 
