@@ -586,7 +586,7 @@ Eslatma:
 Kutubxonaning nomi .aar fayl nomi bilan to'g'ri kelishi kerak (zirhlib-debug.aar).
 
 app/src/main/kotlin/.../MainActivity.kt faylimizga uz.zirh.zirhlib.ZirhMilliy kutubxonani import qilib olamiz.
-```
+```dart
 package <package nomi>
 
 import io.flutter.embedding.android.FlutterActivity
@@ -596,7 +596,7 @@ import io.flutter.plugin.common.MethodChannel
 import uz.zirh.zirhlib.ZirhMilliy
 ```
 MethodChannelda kutubxona funksiyalaridan biridan foydalanish usuli.
-```
+```dart
 class MainActivity : FlutterActivity() {
 
     private val CHANNEL = "com.example.zirh/root" /// com.exampe.zirh/root -> bu bizda kanal nomi yani kutubxonaga murojaat qilish uchun
@@ -625,7 +625,7 @@ class MainActivity : FlutterActivity() {
 
 app/src/main/kotlin/.../MainActivity.kt faylimizning eng pastki qismiga quyidagicha kutubxonani yuklab olish funksiyasini kiritib qo'yamiz.
 
-```
+```dart
 companion object {
         init {
             System.loadLibrary("mobil") // ← .so kutubxonangiz nomi (masalan, libzirh.so bo‘lsa "zirh" yoziladi)
@@ -633,7 +633,7 @@ companion object {
     }
 ```
 Endi flutter uchun bridge.dart yaratib olamiz. bridge.dart orqali biz flutter loyihamizda istalgan fayl koddan turib foydalanish imkonini beradi.
-```
+```dart
 import 'package:flutter/services.dart';
 
 class ZirhMilliyNativeBridge {
