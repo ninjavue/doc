@@ -1,6 +1,6 @@
 # Zirh kutubxonasini ishlatish bo‘yicha qo‘llanma
 Zirh kutubxonasidan foydalanishni boshlash uchun uni o‘z Android loyihangizga to‘g‘ri ulash lozim. Quyidagi bosqichlarni bajaring:
-#
+## `jitpack.io`orqali kutubxonani ulash
 `jitpack.io` repozitoriyasiga ulanish uchun token kerak bo‘ladi. Buning uchun quyidagi qatorni `.gradle/gradle.properties` fayliga qo‘shing:
 ```kotlin
 authToken=jp_nk2513bvl6g5b8jjv1m0uckif2
