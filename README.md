@@ -273,6 +273,8 @@ app/
 Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
 
 ---
+Quydagi yozilgan fuksiyalarni barchasi har bir activityda chaqrib ishlating va qaysi activityda apiga so'rov yuborilayotganda api so'rov ketish oldindan pastda yozilgan barcha funksiyalarni qayta chaqirib ishlating natijasiga qarab apiga so'rov yuboring.
+---
 ## 🚦 `vpnniAniqlash()` Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmada **VPN ulanishi mavjud yoki yo‘qligini** aniqlash uchun ishlatiladi.  
