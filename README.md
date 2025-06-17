@@ -561,7 +561,7 @@ val parsed = gson.fromJson(jsonString, GetResponse::class.java)
 ```kotlin
    Thread {
         try {
-            // IDISI 2 GA TENG MALUMOTNI O;CHIRISH
+            // IDISI 2 GA TENG MALUMOTNI O'CHIRISH
             val res: String = lib.malumotOlish(0, 0, "2", "DELETE", null, null)
             runOnUiThread {
                 Toast.makeText(this, "DELETE: ${res}", Toast.LENGTH_SHORT).show()
