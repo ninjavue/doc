@@ -432,6 +432,21 @@ class MainActivity : ComponentActivity() {
 
 `malumotalmashish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya orqali ilova server bilan xavfsiz HTTP aloqani taminlaydi. Ushbu funksiyadan foydalanish uchun quydagi namunadan foydalansangiz bo'ladi.
 
+### ⚙️ Parametrlar
+
+| Parametr      | Turi             | Tavsif |
+|---------------|------------------|--------|
+| `url` | `String`            | Url manzil masalan(https://example.com/api/v1/users. |
+| `METHOD`   | `String`            | HTTP metod: `GET`, `POST`, `PUT`, `DELETE`. |
+| `body`          | `String?`        | Body ixtiyoriy. |
+| `headers`      | `String`         | Sarlavhalar (headers), ixtiyoriy. |
+| `filePath`      | `String`         | Fayl joylashgan joyi |
+| `fileBytes`     | `Array<String>?` | Fayl hajmi. |
+| `fileName`        | `String?`        | Fayl nomi. |
+| `fileField`        | `String?`        | Fayl qiymati. |
+
+
+
 
 ```kotlin
 private fun sendGet() {
