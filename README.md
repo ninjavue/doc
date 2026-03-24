@@ -425,6 +425,50 @@ class MainActivity : ComponentActivity() {
 }
 
 ```
+
+
+---
+## 📡 `malumotalmashish()` funksiyasi 
+
+`malumotalmashish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya orqali ilova server bilan xavfsiz HTTP aloqani taminlaydi. Ushbu funksiyadan foydalanish uchun quydagi namunadan foydalansangiz bo'ladi.
+
+
+```kotlin
+private fun sendGet() {
+    Thread {
+        try {
+
+            runOnUiThread {
+                resultText = "GET yuborilmoqda..."
+            }
+
+            val response = lib.malumotalmashish(
+                "https://jsonplaceholder.typicode.com/posts/1", // url
+                "GET",// method
+                null, // body
+                null, // headers
+                null, // filePath
+                null, // fileBytes
+                null, // fileName
+                null  // fileField
+            )
+
+            runOnUiThread {
+                resultText = response
+            }
+
+        } catch (e: Exception) {
+            Log.e("ApiTest", "Xatolik: ${e.message}", e)
+
+            runOnUiThread {
+                resultText = "Xatolik: ${e.message}"
+            }
+        }
+    }.start()
+}
+```
+
+
 # Flutter
 ---
 ## 📡 `malumotOlish()` Funksiyasi
