@@ -1,72 +1,17 @@
 # Zirh-mobil kutubxonasini ishlatish bo'yicha yo'riqnoma
 ---
-[![Android](https://img.shields.io/badge/Android-blue?style=for-the-badge)](https://github.com/ninjavue/doc/blob/main/README.md)
-[![Flutter](https://img.shields.io/badge/Flutter-blue?style=for-the-badge)](https://github.com/ninjavue/doc/blob/main/flutter.md)
+[![Android](https://img.shields.io/badge/Android-blue?style=for-the-badge)](#android)
+[![Flutter](https://img.shields.io/badge/Flutter-blue?style=for-the-badge)](#Flutter)
 
 ---
 # Android
 
 Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Android loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
----
-# `jitpack.io`orqali kutubxonani ulash
-`jitpack.io` repozitoriyasiga ulanish uchun token kerak bo‘ladi. Buning uchun quyidagi qatorni `.gradle/gradle.properties` fayliga qo‘shing:
-```kotlin
-authToken=jp_nk2513bvl6g5b8jjv1m0uckif2
-```
-## `gradle.kts` orqali ulash
-`settings.gradle.kts` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qatoriga jitpack orqali manzilini qo‘shing: 
-```kotlin
-  dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://jitpack.io")
-            credentials.username = providers.gradleProperty("authToken").get()
-        }
-    }
-}
-```
-## `gradle` orqali ulash
-`settings.gradle` faylini oching, `dependencyResolutionManagement` bo'limidagi `repositories` qatoriga jitpack orqali manzilini qo‘shing: 
-```kotlin
-  dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://jitpack.io")
-            credentials = {username, authToken}
-        }
-    }
-}
-```
-## `maven` orqali ulash
-```kotlin
- <settings>
-  <servers>
-    <server>
-      <id>jitpack.io</id>
-      <username>jp_nk2513bvl6g5b8jjv1m0uckif2</username>
-      <password>.</password>
-    </server>
-  </servers>
-</settings>
-```
-#
-<!--Endi esa, `app` modulining `build.gradle.kts` faylida `dependencies` bo‘limiga quyidagicha yozing:
-```kotlin
-  dependencies {
-    implementation("com.github.XojiakbarJamoldinov:zirh-mobil-lib:v1.0.0")
-  }
-```
-# -->
----
+
+
 # `aar` fayl orqali kutubxonani ulash
 `aar` faylni kutubxonaga qo'shish uchun loyihangizdagi `app` papkasining ichida yangi `libs` nomli papka yarating va unga `.aar` formatidagi
-Zirh kutubxona faylini joylashtiring.
+Zirh-mobil kutubxona faylini joylashtiring.
 ```
 app/
  └── libs/
@@ -96,7 +41,7 @@ dependencies {
 > **Eslatma:**
 > - Kutubxonaning nomi `.aar` fayl nomi bilan to‘g‘ri kelishi kerak `(zirh-mobil-lib-release.aar)`.
 #
-Zirh kutubxonasini loyihangizga ulab bo'lganingizdan so'ng, kod takrorlanishining oldini olish va strukturalashtirish maqsadida barcha `Activity`lar uchun umumiy ota klass yaratish tavsiya etiladi. Odatda bu klass `BaseActivity.kt` (yoki `.java`) deb nomlanadi.Bu klass kutubxonani boshlang'ich sozlash (initializatsiya) uchun xizmat qiladi.
+Zirh-mobil kutubxonasini loyihangizga ulab bo'lganingizdan so'ng, kod takrorlanishining oldini olish va strukturalashtirish maqsadida barcha `Activity`lar uchun umumiy ota klass yaratish tavsiya etiladi. Odatda bu klass `BaseActivity.kt` (yoki `.java`) deb nomlanadi.Bu klass kutubxonani boshlang'ich sozlash (initializatsiya) uchun xizmat qiladi.
 Quyidagi kabi `BaseActivity.kt` faylini yarating:
 ```kotlin
 import uz.zirh.zirhlib.ZirhMilliy
@@ -115,6 +60,143 @@ open class BaseActivity : ComponentActivity() {
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
+# Flutter
+
+Zirh-mobile kutubxonasidan foydalanishni boshlash uchun uni o'z Flutter loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
+
+Flutter loyihamizni `android/app` papkani ichiga `libs` nomli kutubxona yaratib olamiz.
+
+```
+flutter_project/
+├── android/
+│   ├── app/
+│   │   ├── libs/               
+│   │   │  
+│   │   ├── src/
+│   │   └── build.gradle.kts
+│   ├── build.gradle.kts
+│   └── ...
+├── lib/
+├── pubspec.yaml
+└── ...
+
+```
+
+Keyin esa libs papkani ichiga zirhlib-debug.aar kutubxonamizni joylashtirib olamiz
+```
+flutter_project/
+├── android/
+│   ├── app/
+│   │   ├── libs/                            ← 📂 Bu yerga .aar fayl qo‘yiladi
+│   │   │   └── zirh-mobil-lib-release.aar   ← 📦 JNI kutubxonani o‘z ichiga olgan .aar fayl
+│   │   ├── src/
+│   │   └── build.gradle.kts
+│   └── ...
+├── lib/
+├── pubspec.yaml
+└── ...
+```
+`settings.gradle.kts` faylida `flatDir` sozlamasini yozing
+```
+repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        flatDir {
+            dirs("app/libs")
+        }
+    }
+```
+app modulining build.gradle.kts faylida kutubxonani ulash
+```
+dependencies {
+    implementation(files("libs/zirh-mobil-lib-release.aar"))
+}
+```
+Eslatma:
+
+Kutubxonaning nomi `.aar` fayl nomi bilan to'g'ri kelishi kerak `(zirh-mobil-lib-release.aar)`.
+
+Yuqorida ko'rsatilgan quyidagi 2 faylni `assets/` ichiga joylashtiring:
+
+```
+app/
+├── src/
+│   └── main/
+│       └── assets/
+|           └── data.enc  ✅ Shifrlangan JSON
+│           └── kalit.enc ✅ RSA bilan shifrlangan AES kalit
+|            
+```
+
+
+`app/src/main/kotlin/.../MainActivity.kt` faylimizga `uz.zirh.zirhlib.ZirhMilliy` kutubxonani import qilib olamiz.
+```dart
+package <package nomi>
+
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
+...
+import uz.zirh.zirhlib.ZirhMilliy
+```
+`MethodChannel`da kutubxona funksiyalaridan biridan foydalanish usuli.
+```dart
+class MainActivity : FlutterActivity() {
+
+    private val CHANNEL = "com.example.zirh/root" /// com.exampe.zirh/root -> bu bizda kanal nomi yani kutubxonaga murojaat qilish uchun
+
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "rootlikkatekshirish" -> {
+                    try {
+                        val isRooted = ZirhMilliy().rootniAniqlash()
+                        result.success(isRooted)
+                    } catch (e: Exception) {
+                        result.error("JNI_ERROR", "Failed to call native rootniAniqlash", e.message)
+                    }
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+        }
+    }
+}
+```
+
+`app/src/main/kotlin/.../MainActivity.kt` faylimizning eng pastki qismiga quyidagicha kutubxonani yuklab olish funksiyasini kiritib qo'yamiz.
+
+```dart
+companion object {
+        init {
+            System.loadLibrary("mobil") // ← .so kutubxonangiz nomi (masalan, libzirh.so bo‘lsa "zirh" yoziladi)
+        }
+    }
+```
+Endi flutter uchun `bridge.dart` yaratib olamiz. bridge.dart orqali biz flutter loyihamizda istalgan fayl koddan turib foydalanish imkonini beradi.
+```dart
+import 'package:flutter/services.dart';
+
+class ZirhMilliyNativeBridge {
+  static const _channel = MethodChannel('com.example.zirh/root'); /// kanal nomi berilishi lozim
+
+  static Future<bool> rootniAniqlash() async {
+    try {
+      final bool? result = await _channel.invokeMethod<bool>('rootlikkatekshirish');
+      return result ?? false;
+    } on PlatformException catch (e) {
+      print('JNI method error: ${e.message}');
+      return false;
+    }
+  }
+}
+
+```
+
 ---
 ## 🔐 Ma'lumotlarni Shifrlash
 
@@ -202,7 +284,7 @@ openssl pkeyutl -encrypt -pubin -inkey public.pem -in aes.raw -out kalit.enc
 ```
 
 Bu yerda:
-- `public.pem` – RSA ochiq kalit
+- `public.pem` – RSA ochiq kalit (yuqorida berilgan)
 - `aes.raw` – AES kalitning binar ko‘rinishi
 - `kalit.enc` – **shifrlangan AES kalit**, bu `data.enc` ni yechish uchun kerak bo‘ladi.
 #
@@ -272,9 +354,6 @@ app/
 
 Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
 
----
-Quydagi yozilgan fuksiyalarni barchasi har bir activityda chaqrib ishlating va qaysi activityda apiga so'rov yuborilayotganda api so'rov ketish oldindan pastda yozilgan barcha funksiyalarni qayta chaqirib ishlating natijasiga qarab apiga so'rov yuboring.
----
 ## 🚦 `vpnniAniqlash()` Funktsiyasi
 
 Ushbu funksiya ilova ishga tushgan qurilmada **VPN ulanishi mavjud yoki yo‘qligini** aniqlash uchun ishlatiladi.  
@@ -456,6 +535,7 @@ Quyidagi kod `BaseActivity` klassida `onResume()` ichida `imzoAniqlash()` funksi
         }
     }
 ```
+# Flutter
 ---
 ## 📡 `malumotOlish()` Funksiyasi
 
@@ -574,6 +654,9 @@ val parsed = gson.fromJson(jsonString, GetResponse::class.java)
         }
     }.start()
 ```
+> ✅ **Eslatma:** 
+> Yuqoridagi `rootniAniqlash()`,`emulyatorniAniqlash()`,`vpnniAniqlash()`, `imzoAniqlash()`, `playMarketniAniqlash()`  funksiyalarni ilovani turli qismlarida takror ishlatish tavsiya etiladi(Ilova ishga tushganda, har bir Activity da, API so'rovlarini jo'natishdan oldin, ...)
+
 
 
 
