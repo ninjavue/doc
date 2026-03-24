@@ -250,10 +250,39 @@ Natijada siz AES kalitni 64 ta belgidan iborat **hex formatdagi** qiymatini olas
 
 #
 
-### 🔐 4. JSON faylni AES-256-CBC bilan shifrlash
+### 🔐 4. JSON faylni AES bilan shifrlash
 
-```bash
-openssl enc -aes-256-cbc -in data.json -out data.enc -K <AES_KALIT_HEX_QIYMAT> -iv 00000000000000000000000000000000 -nosalt
+```python
+#!/bin/bash
+
+# Sozlamalar
+INPUT_FILE="data.json"
+OUTPUT_FILE="data.enc"
+AES_KEY_HEX="e5f3d69593946edbe60ad48663c15e2e503def3c6f7691b46fe81d9c67b15fd8" # 64 ta belgi (256-bit)
+
+# 1. Tasodifiy 16 baytli (32 ta hex belgisi) IV yaratish
+IV_HEX=$(openssl rand -hex 16)
+echo "Yaratilgan IV: $IV_HEX"
+
+# 2. IV-ni HEX-dan Binary-ga o'tkazish (xxd-siz)
+# Biz IV-ni shunchaki shifrlayotgandek qilib, lekin "null" shifr bilan binary-ga o'tkazamiz
+echo -n "$IV_HEX" | openssl enc -aes-256-cbc -K "$AES_KEY_HEX" -iv "$IV_HEX" -p | grep "iv=" | cut -d= -f2 > /dev/null # Bu qator shunchaki tekshiruv uchun
+
+# Eng oddiy yo'li: IV-ni binary faylga yozish uchun openssl rand-dan foydalanamiz
+# Lekin bizga aynan o'sha $IV_HEX kerak. Shuning uchun printf-dan foydalanamiz:
+printf "$(echo $IV_HEX | sed 's/\(..\)/\\x\1/g')" > iv.bin
+
+# 3. Ma'lumotni shifrlash
+openssl enc -aes-256-cbc -K "$AES_KEY_HEX" -iv "$IV_HEX" -in "$INPUT_FILE" -out "temp.bin" -nosalt
+
+# 4. Birlashtirish: IV (16 byte) + Ciphertext
+cat iv.bin temp.bin > "$OUTPUT_FILE"
+
+# 5. Tozalash
+rm iv.bin temp.bin
+
+echo "Tayyor: $OUTPUT_FILE (IV boshiga biriktirildi)"
+
 ```
 
 > **Eslatma:**
