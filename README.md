@@ -15,7 +15,7 @@ Zirh-mobil kutubxona faylini joylashtiring.
 ```
 app/
  └── libs/
-      └── zirh-mobil-lib-release.aar
+      └── zirhlib-releasex.x.x.aar
 ```
 #
 ## `settings.gradle` yoki `settings.gradle.kts` faylida `flatDir` sozlamasini yozing
@@ -35,30 +35,23 @@ dependencyResolutionManagement {
 #
 ```kotlin
 dependencies {
-    implementation(":zirh-mobil-lib-release.aar")
+    implementation(":zirhlib-releasex.x.x.aar")
 }
 ```
 > **Eslatma:**
-> - Kutubxonaning nomi `.aar` fayl nomi bilan to‘g‘ri kelishi kerak `(zirh-mobil-lib-release.aar)`.
+> - Kutubxonaning nomi `.aar` fayl nomi bilan to‘g‘ri kelishi kerak `(zirhlib-releasex.x.x.aar)`.
 #
-Zirh-mobil kutubxonasini loyihangizga ulab bo'lganingizdan so'ng, kod takrorlanishining oldini olish va strukturalashtirish maqsadida barcha `Activity`lar uchun umumiy ota klass yaratish tavsiya etiladi. Odatda bu klass `BaseActivity.kt` (yoki `.java`) deb nomlanadi.Bu klass kutubxonani boshlang'ich sozlash (initializatsiya) uchun xizmat qiladi.
-Quyidagi kabi `BaseActivity.kt` faylini yarating:
-```kotlin
-import uz.zirh.zirhlib.ZirhMilliy
-
-open class BaseActivity : ComponentActivity() {
-    private lateinit var lib: ZirhMilliy
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ZirhMilliy.faylManzili(assets)
-        lib = ZirhMilliy() 
-    }
-}
-```
-#
-`AndroidManifest.xml` faylliga internet uchun ruxsat(permission) qo'shing.
+`AndroidManifest.xml` faylliga internet uchun ruxsatlarni(permission) qo'shing.
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
+Quydagi queriesni `AndroidManifest.xml` faylga qo'shing
+```xml
+ <queries>
+       <package android:name="com.android.vending" />
+       <package android:name="com.sec.android.app.samsungapps" />
+</queries>
 ```
 # Flutter
 
