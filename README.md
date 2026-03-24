@@ -246,11 +246,13 @@ Bu buyruq orqali **256-bit AES kalit** yaratiladi va `base64` formatda `aes.key`
 base64 -d aes.key | xxd -p -c 256
 ```
 
-Natijada siz AES kalitni 64 ta belgidan iborat **hex formatdagi** qiymatini olasiz. Ushbu qiymat quyida `-K` parametriga qo‘shiladi.
+Natijada siz AES kalitni 64 ta belgidan iborat **hex formatdagi** qiymatini olasiz. Ushbu qiymatni siz pastdagi kodni ichidagagi `AES_KEY_HEX` shu o'zgaruvchini qiymatidagi `e5f3d69593946edbe60ad48663c15e2e503def3c6f7691b46fe81d9c67b15fd8` shu hashni o'rniga joylashtiring.
 
 #
 
 ### 🔐 4. JSON faylni AES bilan shifrlash
+
+`encrypt.sh` fayl oching va quydagi kodni fayl ichiga yozing va saqlang.
 
 ```python
 #!/bin/bash
@@ -284,11 +286,7 @@ rm iv.bin temp.bin
 echo "Tayyor: $OUTPUT_FILE (IV boshiga biriktirildi)"
 
 ```
-
-> **Eslatma:**
-> - `-K` – yuqorida olingan hex AES kalit
-> - `-iv` – **o‘zgarmas** (fixed) IV qiymat: `00000000000000000000000000000000`
-> - `-nosalt` – deterministik natija olish uchun
+Faylni saqlab olganingizdan keyin faylni ishga tushuring natijada sizda shifrlangan `data.enc` fayli hosil bo'ladi. 
 
 #
 
@@ -305,11 +303,11 @@ Bu qadamda `aes.key` ni raw ikkilamchi formatga o‘tkazasiz. Sababi, RSA bilan 
 ### 🛡 6. RSA public kalit bilan AES kalitni shifrlash
 
 ```bash
-openssl pkeyutl -encrypt -pubin -inkey public.pem -in aes.raw -out kalit.enc
+openssl pkeyutl -encrypt -pubin -inkey public_key.pem -in aes.raw -out kalit.enc -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256
 ```
 
 Bu yerda:
-- `public.pem` – RSA ochiq kalit (yuqorida berilgan)
+- `public_key.pem` – RSA ochiq kalit (yuqorida berilgan)
 - `aes.raw` – AES kalitning binar ko‘rinishi
 - `kalit.enc` – **shifrlangan AES kalit**, bu `data.enc` ni yechish uchun kerak bo‘ladi.
 #
@@ -337,52 +335,10 @@ app/
 
 ---
 
-
-## 📁 `faylManzili()` Funksiyasi
-
-Ushbu funksiya kutubxonaga **`assets` papkasidagi faylga kirish imkonini beradi**.  
-Funksiyani chaqirish orqali kutubxona ichida joylashgan faylga to‘g‘ridan-to‘g‘ri kirish va uni o‘qish imkoniyati paydo bo‘ladi.
-
-> 📌 **Eslatma:** Faylga kirish uchun Android ilovasidagi `assets` obyektini funksiya ichiga uzatishingiz kerak.
-
-#
-
-### 💻 Foydalanish namunasi
-
-Quyidagi kod `BaseActivity` klassida `onCreate()` ichida `faylManzili()` funksiyasini qanday chaqirishni ko‘rsatadi:
-
-```kotlin
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    
-    // assets papkasiga kirish uchun kutubxonaga kontekst beriladi
-    ZirhMilliy.faylManzili(assets)
-}
-```
-
-#
-
-### 📂 Qayerdagi faylni o‘qiydi?
-
-`assets/` papkasida joylashgan fayllarni o‘qish uchun mo‘ljallangan.  
-Masalan:
-
-```
-app/
-├── src/
-│   └── main/
-│       └── assets/
-|           └── data.enc
-│           └── kalit.enc
-|            
-```
-
-Yuqoridagi holatda `faylManzili()` yordamida `config.json` fayl o‘qilishi mumkin.
-
-## 🚦 `vpnniAniqlash()` Funktsiyasi
+## 🚦 Vpnni aniqlash
 
 Ushbu funksiya ilova ishga tushgan qurilmada **VPN ulanishi mavjud yoki yo‘qligini** aniqlash uchun ishlatiladi.  
-Agar qurilmada faol VPN ulanishi mavjud bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda `false`.
+Agar qurilmada vpn holatini aniqlash uchun data.jsonda `vpn`:`true` qilish yetarli agar qurulmada vpn yoniq bo'lsa ilova o'z ish jarayonini yakunlaydi.
 
 > 🔒 **VPN mavjudligi xavfsizlik talablariga zid bo‘lishi mumkin.**
 > VPN orqali foydalanuvchi o'z IP manzilini yashirishi, trafikni ushlab tahlil qilishi (MITM) va xavfsizlikni chetlab o'tuvchi vositalardan foydalanishi mumkin. 
@@ -391,59 +347,19 @@ Agar qurilmada faol VPN ulanishi mavjud bo‘lsa, funksiya `true` qiymat qaytara
 **Eslatma:** Funksiya ishlashi uchun internetga ruxsat kerak.
 #
 
-### 💻 Foydalanish namunasi
-
-Quyidagi kod `BaseActivity` klassida `onResume()` ichida `vpnniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
-
-```kotlin
-  override fun onResume() {
-        super.onResume()
-        val isVpn = lib.vpnniAniqlash()
-        if (isVpn) {
-            Toast.makeText(this, "Sizning qurulmangizda vpn aniqlandi", Toast.LENGTH_LONG).show()
-            finishAffinity()
-            System.exit(0)
-        }
-    }
-```
 ---
 
-## 🧪 `emulyatorniAniqlash()` Funktsiyasi
+## 🧪 Emulatorni aniqlash
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **emulyator (soxta qurilma)** ekanligini aniqlash uchun mo‘ljallangan.  
-Agar ilova real qurilmada ishlayotgan bo‘lsa, funksiya `false` qaytaradi, aks holda emulyator aniqlansa `true` qiymat qaytaradi.
+Agar ilova real qurilmada ishlayotgan bo‘lsa, ilova ishlashni davom etadi aks holda ilova ish jarayonini yakunlaydi. Ushbu funksiyani ishlatish uchun `data.json` fayldagi `emulyator`:`true` qilish yetarli.
 
 > ⚠️ **Emulyator (simulyator)da ishlayotgan ilova xavfsizlik nuqtai nazaridan ishonchsiz hisoblanadi.**  
 > Emulyator yordamida ilovaning serverga yuborayotgan va qabul qilayotgan ma'lumotlari tahlil qilinib, maxfiy ma’lumotlar ko'rish mumkin.
 
-> ✅ **Eslatma:**  
-> Agar emulyator aniqlansa, foydalanuvchiga ogohlantiruvchi xabar chiqaring va ilovani yopish uchun quyidagi funksiyalardan foydalaning:
->
-> ```kotlin
-> finishAffinity() 
-> System.exit(0)  
-> ```
-#
-
-### 💻 Foydalanish namunasi
-
-Quyidagi kod `BaseActivity` klassida `onResume()` ichida `emulyatorniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
-
-```kotlin
- override fun onResume() {
-        super.onResume()
-        val isEmulyator = lib.emulyatorniAniqlash(this)
-        if (isEmulyator) {
-            Toast.makeText(this, "Ilova emulyatorda ishga tushdi", Toast.LENGTH_LONG).show()
-            finishAffinity()
-            System.exit(0)
-        }
-    }
-```
-
 
 ---
-## ⚠️ `rootniAniqlash()` Funktsiyasi
+## ⚠️ Root qurulmalarni aniqlash
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
 
@@ -478,59 +394,11 @@ Agar qurilma root qilingan bo‘lsa, funksiya `true` qiymat qaytaradi, aks holda
 >    Trafik (token/parollar) kuzatilib, tahlil qilinadi.
 
 
-> ✅ **Eslatma:**  
-> Agar qurilma root qilingan bo‘lsa (`true` qaytsa), foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish kerak:
->
-> ```kotlin
-> finishAffinity() 
-> System.exit(0)  
-> ```
-#
 
-### 💻 Foydalanish namunasi
+## 🛡️ Ilovani play marketdan o'rnatilganligini tekshirish.
 
-Quyidagi kod `BaseActivity` klassida `onResume()` ichida `rootniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
+Ushbu funksiya ilova Play Market orqali o‘rnatilganligini aniqlash uchun ishlatiladi. Agar ilova boshqa manbadan (masalan .apk orqali qo‘lda) o‘rnatilgan bo‘lsa, bu xavfsizlikka tahdid solishi mumkin. Ushbu funksiya ishlashi uchun `data.json` fayldagi `playmarket`:`true` qilish yetarli.
 
-```kotlin
- override fun onResume() {
-        super.onResume()
-        val isRoot = lib.rootniAniqlash()
-        if (isRoot) {
-            Toast.makeText(this, "Ilova root qurulmada ishga tushdi", Toast.LENGTH_LONG).show()
-            finishAffinity()
-            System.exit(0)
-        }
-    }
-```
----
-## 🛡️ `playMarketniAniqlash()` Funktsiyasi
-
-Ushbu funksiya ilova Play Market orqali o‘rnatilganligini aniqlash uchun ishlatiladi. Agar ilova boshqa manbadan (masalan .apk orqali qo‘lda) o‘rnatilgan bo‘lsa, bu xavfsizlikka tahdid solishi mumkin.
-
-> ✅ **Eslatma:**  
-> Agar ilova Play Marketdan yuklanmagan bo‘lsa (`false` qaytsa), foydalanuvchiga ogohlantiruvchi xabar chiqarish va ilovani darhol yopish kerak:
->
-> ```kotlin
-> finishAffinity() 
-> System.exit(0)  
-> ```
-#
-
-### 💻 Foydalanish namunasi
-
-Quyidagi kod `BaseActivity` klassida `onResume()` ichida `playMarketniAniqlash()` funksiyasini qanday chaqirishni ko‘rsatadi:
-
-```kotlin
- override fun onResume() {
-    super.onResume()
-    val isPlayMarket = lib.playMarketniAniqlash(this)
-    if (!isPlayMarket) {
-        Toast.makeText(this, "Iltimos ilovani Play Marketdan yuklab oling", Toast.LENGTH_LONG).show()
-        finishAffinity()
-        System.exit(0)
-    }
-}
-```
 ---
 ## ✍️ `imzoAniqlash()` Funktsiyasi
 
