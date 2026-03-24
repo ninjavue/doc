@@ -430,7 +430,7 @@ class MainActivity : ComponentActivity() {
 ---
 ## 📡 `malumotalmashish()` funksiyasi 
 
-`malumotalmashish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya orqali ilova server bilan xavfsiz HTTP aloqani taminlaydi. Ushbu funksiyadan foydalanish uchun quydagi namunadan foydalansangiz bo'ladi.
+`malumotalmashish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya orqali ilova server bilan xavfsiz HTTP aloqani taminlaydi. Funksiya quydagi parametrlarni kutub qoladi.
 
 ### ⚙️ Parametrlar
 
@@ -446,7 +446,9 @@ class MainActivity : ComponentActivity() {
 | `fileField`        | `String?`        | Fayl qiymati. |
 
 
+Ushbu funksiyadan foydalanish uchun quydagi namunadan foydalansangiz bo'ladi.
 
+### `GET` so‘rov
 
 ```kotlin
 private fun sendGet() {
@@ -482,6 +484,110 @@ private fun sendGet() {
     }.start()
 }
 ```
+### `POST` so‘rov
+
+```kotlin
+ private fun sendRequest(method: String) {
+        Thread {
+            try {
+                runOnUiThread {
+                    resultText = "Ma'lumot yuborilmoqda..."
+                }
+
+                val body = """{"title":"zirh test","body":"sample body","userId":1}"""
+                val response = lib.malumotalmashish(
+                    "https://jsonplaceholder.typicode.com/posts",
+                    POST,
+                    body,
+                    """{"Content-Type":"application/json"}""",
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                runOnUiThread {
+                    resultText = "response:\n$response"
+                }
+            } catch (e: Exception) {
+                Log.e("ApiTest", "Xatolik: ${e.message}", e)
+                runOnUiThread {
+                    resultText = "$method xatolik: ${e.message}"
+                }
+            }
+        }.start()
+    }
+```
+
+### `PUT` so‘rov
+```kotlin
+ private fun editRequest(method: String) {
+        Thread {
+            try {
+                runOnUiThread {
+                    resultText = "Ma'lumot tahrirlanmoqda..."
+                }
+
+                val body = """{"title":"zirh test","body":"sample body","userId":1}"""
+                val response = lib.malumotalmashish(
+                    "https://jsonplaceholder.typicode.com/posts/1",
+                    PUT,
+                    body,
+                    """{"Content-Type":"application/json"}""",
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                runOnUiThread {
+                    resultText = "response:\n$response"
+                }
+            } catch (e: Exception) {
+                Log.e("ApiTest", "Xatolik: ${e.message}", e)
+                runOnUiThread {
+                    resultText = "$method xatolik: ${e.message}"
+                }
+            }
+        }.start()
+    }
+```
+
+### `DELETE` so‘rov
+
+```kotlin
+ private fun deleteRequest(method: String) {
+        Thread {
+            try {
+                runOnUiThread {
+                    resultText = "Ma'lumot o'chirilmoqda..."
+                }
+
+                val response = lib.malumotalmashish(
+                    "https://jsonplaceholder.typicode.com/posts/1",
+                    DELETE,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+
+                runOnUiThread {
+                    resultText = "response:\n$response"
+                }
+            } catch (e: Exception) {
+                Log.e("ApiTest", "Xatolik: ${e.message}", e)
+                runOnUiThread {
+                    resultText = "$method xatolik: ${e.message}"
+                }
+            }
+        }.start()
+    }
+
+```
+
 
 
 # Flutter
