@@ -404,6 +404,26 @@ Ushbu funksiya ilova Play Market orqali o‘rnatilganligini aniqlash uchun ishla
 
 Ilova imzosini tekshirish funksiyasi ilovaning ruxsatsiz o‘zgartirilgan APK emasligini aniqlash uchun mo‘ljallangan. U ilovaning imzosini tekshiradi va agar u original imzo bilan mos tushmasa, ilova ishlash jarayonini to'xtatadi. Bu funksiyadan foydalanish uchun `data.json` faylidagi `imzo` ga ilovani imzolash uchun imzo faylni `sha256` qiymatni joylashtiring.
 
+---
+## `malumotolish()` funksiyasi orqali siz `data.enc` faylni ichiga saqlagan malumotlaringizni olishingiz mumkin bo'ladi. Bu funksiyadan foydalanish uchun siz quydagi usulda shifrlangan malumotlaringizni xavfsiz tarzda olishingiz mumkin bo'ladi.
+
+```java
+import uz.zirh.zirhlib.ZirhMilliy
+
+class MainActivity : ComponentActivity() {
+
+    private lateinit var lib: ZirhMilliy
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lib = ZirhMilliy()
+
+        val testM = lib.malumotolish("hashlar")
+        
+    }
+}
+
+```
 # Flutter
 ---
 ## 📡 `malumotOlish()` Funksiyasi
