@@ -220,13 +220,16 @@ Birinchi bosqichda maxfiy ma'lumotlar `data.json` faylga quyidagi formatda yozil
 
 ```json
 {
-    "domainlar": ["https://jsonplaceholder.typicode.com", "https://httpbin.org"],
-    "havolalar": ["posts", "post"],
-    "hashlar": ["sha256///UzJAZYxLBnEpBwXAcmd4WHi7f8aYgfMExGnoyp5B04=", "sha256//IFG+z/oQKXfpUYOHgWHy5axgkT9B01XSxwb2AHDyN34="],
-    "tokenlar": ["abc123", "def456", "ghi789"],
-    "imzo": "B83BC82F4E631114B79E5E01DB8590CAF76D3384B2CFCFEE27F31B0C886262B1"
+    "imzo": "c4fbec9f103e46f13864c208ea93a26a48cd2092428c5dae3b7529703b74f7c9",
+    "playmarket":true,
+    "emulyator":true,
+    "vpn":true,
+    "hashlar": [ "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s="]
+   
 }
 ```
+Bu fayl kutubxonani konfiguratsiya fayli bo'lib, agar ilovada `playmarket`, `emulyator` va `vpn` tekshiruvi joriy etish kerak bo'lsa ularni `true` qiymatga tenglab qo'yish kerak bo'ladi. Agarda bu tekshiruvlar kerak bo'lmasa `false` qiymatga tenglash kerak bo'ladi.
+
 ### 🔑 2. AES-256 kalitni yaratish
 
 ```bash
