@@ -445,6 +445,13 @@ class MainActivity : ComponentActivity() {
 | `fileName`        | `String?`        | Fayl nomi. |
 | `fileField`        | `String?`        | Fayl qiymati. |
 
+### 🔁 Natija
+Funksiya `String` (odatda JSON) formatida javob qaytaradi. Uni `Gson` yordamida quyidagicha obyektga aylantirish mumkin:
+
+```kotlin
+val gson = Gson()
+val parsed = gson.fromJson(jsonString, GetResponse::class.java)
+```
 
 Ushbu funksiyadan foydalanish uchun quydagi namunadan foydalansangiz bo'ladi.
 
@@ -587,130 +594,6 @@ private fun sendGet() {
     }
 
 ```
-
-
-
-# Flutter
----
-## 📡 `malumotOlish()` Funksiyasi
-
-`malumotOlish()` funksiyasi — server bilan aloqani ta'minlovchi asosiy metod bo‘lib, u xavfsiz tarzda so‘rov yuborish va javob olish imkonini beradi. Bu funksiya AES yordamida shifrlangan `data.enc` faylidagi domen, path va boshqa parametrlar asosida HTTP so‘rov yuboradi.
-
-## 🛡️ SSL Pinning
-
-> **SSL Pinning** vositasi orqali ilova faqat **ishonchli sertifikat** bilan ishlovchi serverga ulanadi. Bu orqali man-in-the-middle (MITM) hujumlarining oldi olinadi.
-
-**Server sertifikatidan hash olish:**
-
-```bash
-echo | openssl s_client -servername your_server_address -connect your_server_address:443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform DER | openssl dgst -sha256 -binary | openssl enc -base64
-```
-> ✅ **Eslatma:**  
-> Olingan hash qiymat json faylidagi hashlar maydonida bo'lishi kerak aks holda serverga so'rov yuborilmaydi.
->
-### ⚙️ Parametrlar
-
-| Parametr      | Turi             | Tavsif |
-|---------------|------------------|--------|
-| `domainIndex` | `Int`            | Domenlar ro‘yxatidan indeks (0 — birinchi domen). |
-| `pathIndex`   | `Int`            | Havolalar (`endpoint`) ro‘yxatidan indeks. |
-| `id`          | `String?`        | Qo‘shimcha identifikator (masalan: `12` → `/posts/12`). |
-| `method`      | `String`         | HTTP metod: `GET`, `POST`, `PUT`, `DELETE`. |
-| `headers`     | `Array<String>?` | Sarlavhalar (headers), ixtiyoriy. |
-| `body`        | `String?`        | JSON formatdagi so‘rov ma’lumotlari, ixtiyoriy. |
-
-### 🔁 Natija
-Funksiya `String` (odatda JSON) formatida javob qaytaradi. Uni `Gson` yordamida quyidagicha obyektga aylantirish mumkin:
-
-```kotlin
-val gson = Gson()
-val parsed = gson.fromJson(jsonString, GetResponse::class.java)
-```
-### `GET` so‘rov
-```kotlin
-   Thread{
-        val res: String = lib.malumotOlish(0, 0, null, "GET", null, null)
-  //            MALUMOT STRING FARMATDA KELADI MALUMOTNI JSON PARSE QILISH KERAK
-        runOnUiThread {
-            Toast.makeText(this, "GET: ${res}", Toast.LENGTH_SHORT).show()
-        }
-  //            JSON PARSE QILISH MALUMOTNI
-        val gson = Gson()
-        val parsed = gson.fromJson(res, GetResponse::class.java)
-    }.start()
-```
-### `POST` so‘rov
-```kotlin
-      val name = "Sarlavha"
-      val desc = "Bu postning tanasi"
-
-      val postData = HashMap<String, String>()
-      postData["title"] = name
-      postData["body"] = desc
-      postData["userId"] = "1"
-      val jsonBody: String = gson.toJson(postData)
-      val headers = arrayOf("Content-Type: application/json" /*,"Authorization: Bearer YOUR_TOKEN"*/)
-      Thread {
-          try {
-              val res = lib.malumotOlish(0, 0, null, "POST", headers, jsonBody)
-//                JSON PARSEDAN OLDIN STRING FARMATDA RESPONSE QAYTADI MALUMOTNI JSON PARSE QILISH KERAK
-              runOnUiThread {
-                  Toast.makeText(this, "POST: ${res}", Toast.LENGTH_SHORT).show()
-              }
-//                JSON PARSE QILISH
-              val gson = Gson()
-              val parsed = gson.fromJson(res, DataResponse::class.java)
-
-          } catch (e: Exception) {
-              Log.e("POST ERROR", "Xatolik: ${e.message}")
-          }
-      }.start()
-```
-
-### `PUT` so‘rov
-```kotlin
-      val updatedData: MutableMap<String, String> = HashMap()
-      updatedData["title"] = "Yangi sarlova"
-      updatedData["body"] = "Put so'rovini test qilish"
-      updatedData["userId"] = java.lang.String.valueOf(1)
-
-      val putBody = gson.toJson(updatedData)
-      val putHeaders = arrayOf("Content-Type: application/json")
-      Thread {
-          try {
-              // IDISI 7 GA TENG MALUMOTNI TAHRIRLASH
-              val res = lib.malumotOlish(0, 0, "7", "PUT", putHeaders, putBody)
-              runOnUiThread {
-                  Toast.makeText(this, "PUT: ${res}", Toast.LENGTH_SHORT).show()
-              }
-
-              val parsed = gson.fromJson(res, DataResponse::class.java)
-
-          } catch (e: java.lang.Exception) {
-              Log.e("PUT REQUEST ERROR", "Xatolik yuz berdi:", e)
-          }
-      }.start()
-```
-
-### `DELETE` so‘rov
-```kotlin
-   Thread {
-        try {
-            // IDISI 2 GA TENG MALUMOTNI O'CHIRISH
-            val res: String = lib.malumotOlish(0, 0, "2", "DELETE", null, null)
-            runOnUiThread {
-                Toast.makeText(this, "DELETE: ${res}", Toast.LENGTH_SHORT).show()
-            }
-
-            val parsed = gson.fromJson(res, DataResponse::class.java)
-
-        } catch (e: java.lang.Exception) {
-            Log.e("DELETE ERROR", "Xatolik yuz berdi:", e)
-        }
-    }.start()
-```
-> ✅ **Eslatma:** 
-> Yuqoridagi `rootniAniqlash()`,`emulyatorniAniqlash()`,`vpnniAniqlash()`, `imzoAniqlash()`, `playMarketniAniqlash()`  funksiyalarni ilovani turli qismlarida takror ishlatish tavsiya etiladi(Ilova ishga tushganda, har bir Activity da, API so'rovlarini jo'natishdan oldin, ...)
 
 
 
