@@ -138,72 +138,45 @@ app/
 |            
 ```
 
-
-`app/src/main/kotlin/.../MainActivity.kt` faylimizga `uz.zirh.zirhlib.ZirhMilliy` kutubxonani import qilib olamiz.
+ main.dart faylida native (C/C++) kutubxona bilan qanday ishlash ko‘rsatiladi. Bu yerda FFI (Foreign Function Interface) yordamida .so fayldan ma’lumotlar olinadi.
 ```dart
-package <package nomi>
-
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodChannel
-...
-import uz.zirh.zirhlib.ZirhMilliy
+import 'dart:convert';
+import 'dart:ffi' as ffi;
+import 'package:ffi/ffi.dart';
+import 'package:flutter/material.dart';
 ```
-`MethodChannel`da kutubxona funksiyalaridan biridan foydalanish usuli.
+dart:ffi → native (C/C++) kod bilan ishlash uchun
+ffi.dart → pointerlarni boshqarish (UTF8 conversion)
+dart:convert → JSON parsing uchun
+
+Native funksiya signaturalari
+
 ```dart
-class MainActivity : FlutterActivity() {
-
-    private val CHANNEL = "com.example.zirh/root" /// com.exampe.zirh/root -> bu bizda kanal nomi yani kutubxonaga murojaat qilish uchun
-
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        super.configureFlutterEngine(flutterEngine)
-
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
-            when (call.method) {
-                "rootlikkatekshirish" -> {
-                    try {
-                        val isRooted = ZirhMilliy().rootniAniqlash()
-                        result.success(isRooted)
-                    } catch (e: Exception) {
-                        result.error("JNI_ERROR", "Failed to call native rootniAniqlash", e.message)
-                    }
-                }
-                else -> {
-                    result.notImplemented()
-                }
-            }
-        }
-    }
-}
+typedef NativeGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8> key);
+typedef DartGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8> key);
 ```
-
-`app/src/main/kotlin/.../MainActivity.kt` faylimizning eng pastki qismiga quyidagicha kutubxonani yuklab olish funksiyasini kiritib qo'yamiz.
-
+Bu klass native kutubxona bilan ishlashni markazlashtiradi. (Ilovada faqat bitta instance ishlaydi)
 ```dart
-companion object {
-        init {
-            System.loadLibrary("mobil") // ← .so kutubxonangiz nomi (masalan, libzirh.so bo‘lsa "zirh" yoziladi)
-        }
-    }
+static final ZirhService _instance = ZirhService._internal();
+factory ZirhService() => _instance;
 ```
-Endi flutter uchun `bridge.dart` yaratib olamiz. bridge.dart orqali biz flutter loyihamizda istalgan fayl koddan turib foydalanish imkonini beradi.
+Native kutubxonani yuklash
+
 ```dart
-import 'package:flutter/services.dart';
+final lib = ffi.DynamicLibrary.open('libmobil.so');
+```
+Funksiyani bog‘lash
+Native funksiyani Flutterga ulaydi
+Key orqali ma’lumot qaytaradi
+```dart
+_getInfo = lib.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
+  'flutter_malumot_olish',
+);
 
-class ZirhMilliyNativeBridge {
-  static const _channel = MethodChannel('com.example.zirh/root'); /// kanal nomi berilishi lozim
-
-  static Future<bool> rootniAniqlash() async {
-    try {
-      final bool? result = await _channel.invokeMethod<bool>('rootlikkatekshirish');
-      return result ?? false;
-    } on PlatformException catch (e) {
-      print('JNI method error: ${e.message}');
-      return false;
-    }
-  }
-}
-
+```
+Ma’lumot olish funksiyalari
+```dart
+String get(String key)
 ```
 
 ---
