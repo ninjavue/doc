@@ -106,6 +106,22 @@ dependencies {
     implementation(files("libs/zirh-mobil-lib-release.aar"))
 }
 ```
+jitpack orqali app modulining build.gradle.kts faylida kutubxonani ulash
+```
+dependencies {
+    implementation("com.github.Zirh-uz:mobil-lib:2.0.0")
+}
+```
+jitpack orqali bo'lganda android/build.gradle.kts fayliga quyidagi o'zgarishni qilish kerak bo'ladi 
+```
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
 Eslatma:
 
 Kutubxonaning nomi `.aar` fayl nomi bilan to'g'ri kelishi kerak `(zirh-mobil-lib-release.aar)`.
