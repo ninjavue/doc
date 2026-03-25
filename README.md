@@ -178,6 +178,71 @@ Ma’lumot olish funksiyalari
 ```dart
 String get(String key)
 ```
+## Minimal kod misolida ko'rishimiz mumkin
+```dart
+import 'dart:convert';
+import 'dart:ffi' as ffi;
+import 'package:ffi/ffi.dart';
+import 'package:flutter/material.dart';
+
+// Native signature
+typedef NativeGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>);
+typedef DartGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>);
+
+class ZirhService {
+  late final DartGetInfoFn _getInfo;
+
+  void init() {
+    final lib = ffi.DynamicLibrary.open('libmobil.so');
+    _getInfo = lib.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
+      'flutter_malumot_olish',
+    );
+  }
+
+  List<String> getDomains() {
+    final keyPtr = "domainlar".toNativeUtf8();
+    final resPtr = _getInfo(keyPtr);
+    malloc.free(keyPtr);
+
+    if (resPtr.address == 0) return [];
+
+    final raw = resPtr.toDartString();
+
+    // JSON array bo‘lsa
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is List) {
+        return decoded.map((e) => e.toString()).toList();
+      }
+    } catch (_) {}
+
+    // fallback (a,b,c)
+    return raw.split(',').map((e) => e.trim()).toList();
+  }
+}
+
+void main() {
+  final zirh = ZirhService();
+  zirh.init();
+
+  runApp(MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: Text("Domains")),
+      body: FutureBuilder(
+        future: Future.value(zirh.getDomains()),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return CircularProgressIndicator();
+
+          final domains = snapshot.data!;
+          return ListView(
+            children: domains.map((d) => ListTile(title: Text(d))).toList(),
+          );
+        },
+      ),
+    ),
+  ));
+}
+```
 
 ---
 ## 🔐 Ma'lumotlarni Shifrlash
