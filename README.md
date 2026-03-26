@@ -266,6 +266,105 @@ void main() {
   ));
 }
 ```
+## Malumot Almashish 
+
+Dart tomonidan chaqiriladi va native kutubxona bilan to‘g‘ridan-to‘g‘ri bog‘lanadi.
+```dart
+typedef NativeRequestFn = ffi.Pointer<Utf8> Function(
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<ffi.Uint8>,
+    ffi.Int32,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    );
+
+typedef DartRequestFn = ffi.Pointer<Utf8> Function(
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<ffi.Uint8>,
+    int,
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    );
+
+```
+Bizda data.json quyidagicha bo'lgan holatda
+```dart
+{
+    "playmarket": false,
+    "emulyator": true,
+    "vpn": true,
+
+    "hashlar": [
+        "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s=",
+        "sha256//ItYAkeNu4OWLwJwqsG+rlGN46LIFJkfrRcx9BFbuTtA=",
+        "sha256//xvnBemDjgnzraqJYsDMz2CgXT2Zq3CFBfmyyYSdLdrU=",
+        "sha256//5BWYNtPxvjsl+qhQLxo3jz3ZaK74xyHT/QdOhBB07i0="
+    ],
+
+    "domainlar": [
+        "https://jsonplaceholder.typicode.com",
+        "https://httpbin.org"
+    ],
+
+    "api": {
+        "base_url": "https://jsonplaceholder.typicode.com",
+
+        "endpoints": {
+            "get_post": {
+                "path": "/posts/1",
+                "method": "GET"
+            },
+            "create_post": {
+                "path": "/posts",
+                "method": "POST"
+            },
+            "update_post": {
+                "path": "/posts/1",
+                "method": "PUT"
+            },
+            "delete_post": {
+                "path": "/posts/1",
+                "method": "DELETE"
+            }
+        }
+    }
+}
+```
+FFI orqali bog'lanish
+```dart
+ final lib = ffi.DynamicLibrary.open('libmobil.so');
+
+_get = lib.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
+  'flutter_malumot_olish',
+);
+
+_request = lib.lookupFunction<NativeRequestFn, DartRequestFn>(
+  'flutter_malumot_almashish',
+);
+```
+API chaqirish qismi
+```dart
+// GET
+zirh.callApi("get_post");
+
+// POST
+zirh.callApi("create_post", body: {"title": "Test", "body": "Hello", "userId": 1});
+
+// PUT
+zirh.callApi("update_post", body: {"id": 1, "title": "Updated", "body": "Yangilandi"});
+
+// DELETE
+zirh.callApi("delete_post");
+```
+
 
 ---
 ## 🔐 Ma'lumotlarni Shifrlash
