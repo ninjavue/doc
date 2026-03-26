@@ -597,7 +597,7 @@ Agar ilova real qurilmada ishlayotgan bo‘lsa, ilova ishlashni davom etadi aks 
 
 
 ---
-## ⚠️ Root qurulmalarni aniqlash
+## ⚠️ Root qurilmalarni aniqlash
 Ilovani Play Marketga o'rnatishdan oldin quydagi sozlamalarni qilish kerak bo'ladi.
 Console Play Marketga o'tib (https://play.google.com/console) quydagi ketma ketliklarni bajaring.
 
@@ -624,6 +624,7 @@ Bu bo'limlarda siz `Device integrity checks` yoki `Strong integrity checks` ni t
 
 Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
 Agar qurilma root qilingan bo‘lsa, ilova rootlangan qurilmada ishga tushmaydi.
+Bundan tashqari zararli scriptlarni qo'llanganda ham ilova ishga tushmaydi.
 
 > 🔐 **Root qilingan qurilma xavfsizlik talablariga javob bermaydi.**  
 > Bunday qurilmalar ilovalarning:
