@@ -444,6 +444,19 @@ Birinchi bosqichda maxfiy ma'lumotlar `data.json` faylga quyidagi formatda yozil
     }
 }
 ```
+
+Agar siz kutubxonani `malumotalmashish()` funksiyasidan foydalanmoqchi bo'lsangiz `data.json` faylni ichiga majburiy tarzda `hashlar` maydoni bo'lishi kerak. Ilova ushbu hashlar orqali server bilan xavfsiz aloqani yani SSL Pinningni amalga oshiradi. Yuqoridagi hashni farmati kabi o'z serveringizdan `sha256` farmatda olish uchun quydagi kamandadan foydalanishingiz mumkin bo'ladi.
+
+```bash
+echo | openssl s_client -connect kun.uz:443 -servername kun.uz 2>/dev/null \
+| openssl x509 -pubkey -noout \
+| openssl pkey -pubin -outform DER \
+| openssl dgst -sha256 -binary \
+| openssl enc -base64
+```
+>SSL Pinning bu ilova va server o'rtasidagi so'rovlarga uchunchi shaxs aralashishidan himoyalaydi.
+
+
 Yuqoridagi data.jsondan ilovada quyidagicha UI komponentalarini chaqirib ishlatishimiz mumkin bo'ladi.
 
 ```dart
