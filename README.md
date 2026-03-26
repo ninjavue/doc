@@ -40,6 +40,29 @@ dependencies {
 ```
 > **Eslatma:**
 > - Kutubxonaning nomi `.aar` fayl nomi bilan to‘g‘ri kelishi kerak `(zirhlib-releasex.x.x.aar)`.
+
+# Zirh kutubxonasini `jitpack` orqali loyihaga qo'shish
+
+#
+## `settings.gradle` yoki `settings.gradle.kts` faylida quydagicha yozing
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
+## `app` modulining `build.gradle` faylida kutubxonani ulash
+#
+```kotlin
+dependencies {
+    implementation("com.github.Zirh-uz:mobil-lib:2.0.0")
+}
+```
+
 #
 `AndroidManifest.xml` faylliga internet uchun ruxsatlarni(permission) qo'shing.
 ```xml
