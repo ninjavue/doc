@@ -371,11 +371,11 @@ zirh.callApi("delete_post");
 
 ### ✨ Nima uchun shifrlash zarur?
 
-Ilovada ishlatiladigan ba'zi muhim ma'lumotlar — masalan, **backend server URL’lari**, **directory manzillar**, **tokenlar**, **hash qiymatlar**, **ilovaning imzo (signature) ma'lumotlari**, **ilova UI komponentalari**, **ilovada ishlatiladigan stringlar**, **ilovaga zarur mantiqiy qiymatlarni** va **Ilovaning turli qurilmalarda ishlashi uchun konfiguratsiya parametrlarini** — maxfiy va xavfsizlik talablariga javob beruvchi shaklda saqlanishi kerak.
+Ilovada ishlatiladigan ba'zi muhim ma'lumotlar — masalan, **backend server URL’lari**, **directory manzillar**, **tokenlar**, **hash qiymatlar**, **ilovaning imzo (signature) ma'lumotlari**, **ilova UI komponentalari**, **ilovada ishlatiladigan stringlar**, **ilovaga zarur mantiqiy qiymatlarni** va **ilovaning turli qurilmalarda ishlashi uchun konfiguratsiya parametrlarini** — maxfiy va xavfsizlik talablariga javob beruvchi shaklda saqlanishi kerak.
 
-Agar bu ma’lumotlar shifrlanmagan holda apk ichida yoki fayl tizimida saqlansa, ular tahlil qilinib (reverse engineering), ilovaga hujum qilish, himoya vositalarini osonlik bilan olib tashlash yoki aylanib o'tish, soxta so‘rov yuborish yoki serverdan noto‘g‘ri foydalanish uchun ishlatilishi mumkin.
+Agar bu ma’lumotlar shifrlanmagan holda apk ichida yoki fayl tizimida saqlansa, ular tahlil qilinib (reverse engineering), ilovaga hujum qilish, himoya vositalarini osonlik bilan olib tashlash yoki aylanib o'tishni, soxta so‘rov yuborish yoki serverdan noto‘g‘ri foydalanish uchun ishlatilishi mumkin.
 
-Shuning uchun **shifrlash yordamida bu ma’lumotlarni himoyalash** va ularni faqat kerakli paytda, kerakli joyda yechib olish (deshifrovka qilish) lozim bo‘ladi.
+Shuning uchun **shifrlash yordamida bu ma’lumotlarni himoyalash** va ularni faqat kerakli paytda, kerakli joyda yechib olish (deshifrovka qilish) orqali ilovaning xavfsizligini yaxshilashimiz mumkin bo'ladi.
 
 #
 
@@ -387,7 +387,7 @@ Shuning uchun **shifrlash yordamida bu ma’lumotlarni himoyalash** va ularni fa
 - 🖋 Ilovaning imzo sertifikati (signature)  
 - 🎨 Ilova UI komponentalari
 - ⚙️ Ilovaga zarur mantiqiy qiymatlar
-
+- 🔤 Ilovada ishlatiladigan stringlar
 #
 
 ### 📌 Shifrlash va foydalanish ketma-ketligi
@@ -398,14 +398,74 @@ Birinchi bosqichda maxfiy ma'lumotlar `data.json` faylga quyidagi formatda yozil
 
 ```json
 {
-    "imzo": "c4fbec9f103e46f13864c208ea93a26a48cd2092428c5dae3b7529703b74f7c9",
-    "playmarket":true,
-    "emulyator":true,
-    "vpn":true,
-    "hashlar": [ "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s="]
-   
+    "playmarket": false,
+    "emulyator": true,
+    "vpn": true,
+
+    "hashlar": [
+        "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s=",
+        "sha256//ItYAkeNu4OWLwJwqsG+rlGN46LIFJkfrRcx9BFbuTtA=",
+        "sha256//xvnBemDjgnzraqJYsDMz2CgXT2Zq3CFBfmyyYSdLdrU=",
+        "sha256//5BWYNtPxvjsl+qhQLxo3jz3ZaK74xyHT/QdOhBB07i0="
+    ],
+
+    "domainlar": [
+        "https://jsonplaceholder.typicode.com",
+        "https://httpbin.org"
+    ],
+
+    "api": {
+        "base_url": "https://jsonplaceholder.typicode.com",
+        "endpoints": {
+            "get_post": {"path": "/posts/1", "method": "GET"},
+            "create_post": {"path": "/posts", "method": "POST"},
+            "update_post": {"path": "/posts/1", "method": "PUT"},
+            "delete_post": {"path": "/posts/1", "method": "DELETE"}
+        }
+    },
+
+    "ui": {
+        "colors": {
+            "background": "#0F172A",
+            "card": "#1E293B",
+            "primary": "#2563EB",
+            "text_light": "#FFFFFFB3",
+            "text_dark": "#FFFFFF"
+        },
+        "labels": {
+            "dashboard_title": "Zirh Dashboard",
+            "vpn_status": "VPN",
+            "emulator_status": "Emulyator",
+            "playmarket_status": "Play Market"
+        },
+        "buttons": {
+            "refresh": "Yangilash"
+        }
+    }
 }
 ```
+Yuqoridagi data.jsondan ilovada quyidagicha UI komponentalarini chaqirib ishlatishimiz mumkin bo'ladi.
+
+```dart
+void _loadConfig() {
+    // Ranglar, label va button textlarini o‘qish
+    final uiColors = zirh.get("ui.colors");
+    final uiLabels = zirh.get("ui.labels");
+    final uiButtons = zirh.get("ui.buttons");
+    final domainList = zirh.get("domainlar");
+
+    setState(() {
+      colors = uiColors.isNotEmpty ? jsonDecode(uiColors) : {};
+      labels = uiLabels.isNotEmpty ? jsonDecode(uiLabels) : {};
+      buttons = uiButtons.isNotEmpty ? jsonDecode(uiButtons) : {};
+      domains = domainList.isNotEmpty
+          ? (jsonDecode(domainList) as List).map((e) => e.toString()).toList()
+          : [];
+    });
+  }
+```
+
+
 Bu fayl kutubxonani konfiguratsiya fayli bo'lib, agar ilovada `playmarket`, `emulyator` va `vpn` tekshiruvi joriy etish kerak bo'lsa ularni `true` qiymatga tenglab qo'yish kerak bo'ladi. Agarda bu tekshiruvlar kerak bo'lmasa `false` qiymatga tenglash kerak bo'ladi.
 
 ### 🔑 2. AES-256 kalitni yaratish
