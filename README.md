@@ -126,7 +126,7 @@ repositories {
 app modulining build.gradle.kts faylida kutubxonani ulash
 ```
 dependencies {
-    implementation(files("libs/zirh-mobil-lib-release.aar"))
+    implementation(files("libs/zirhlib-releasex.x.x.aar"))
 }
 ```
 jitpack orqali app modulining build.gradle.kts faylida kutubxonani ulash
