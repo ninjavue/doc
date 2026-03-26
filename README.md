@@ -371,9 +371,9 @@ zirh.callApi("delete_post");
 
 ### ✨ Nima uchun shifrlash zarur?
 
-Ilovada ishlatiladigan ba'zi muhim ma'lumotlar — masalan, **backend server URL’lari**, **directory manzillar**, **tokenlar**, **hash qiymatlar**, va **ilovaning imzo (signature) ma'lumotlari** — maxfiy va xavfsizlik talablariga javob beruvchi shaklda saqlanishi kerak.
+Ilovada ishlatiladigan ba'zi muhim ma'lumotlar — masalan, **backend server URL’lari**, **directory manzillar**, **tokenlar**, **hash qiymatlar**, **ilovaning imzo (signature) ma'lumotlari**, **ilova UI komponentalari**, **ilovada ishlatiladigan stringlar**, **ilovaga zarur mantiqiy qiymatlarni** va **Ilovaning turli qurilmalarda ishlashi uchun konfiguratsiya parametrlarini** — maxfiy va xavfsizlik talablariga javob beruvchi shaklda saqlanishi kerak.
 
-Agar bu ma’lumotlar shifrlanmagan holda apk ichida yoki fayl tizimida saqlansa, ular tahlil qilinib (reverse engineering), ilovaga hujum qilish, soxta so‘rov yuborish yoki serverdan noto‘g‘ri foydalanish uchun ishlatilishi mumkin.
+Agar bu ma’lumotlar shifrlanmagan holda apk ichida yoki fayl tizimida saqlansa, ular tahlil qilinib (reverse engineering), ilovaga hujum qilish, himoya vositalarini osonlik bilan olib tashlash yoki aylanib o'tish, soxta so‘rov yuborish yoki serverdan noto‘g‘ri foydalanish uchun ishlatilishi mumkin.
 
 Shuning uchun **shifrlash yordamida bu ma’lumotlarni himoyalash** va ularni faqat kerakli paytda, kerakli joyda yechib olish (deshifrovka qilish) lozim bo‘ladi.
 
@@ -385,6 +385,8 @@ Shuning uchun **shifrlash yordamida bu ma’lumotlarni himoyalash** va ularni fa
 - 🔑 API tokenlar, maxfiy kalitlar  
 - 🧮 Hashlangan qiymatlar (masalan, SHA256)  
 - 🖋 Ilovaning imzo sertifikati (signature)  
+- 🎨 Ilova UI komponentalari
+- ⚙️ Ilovaga zarur mantiqiy qiymatlar
 
 #
 
