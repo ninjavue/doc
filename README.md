@@ -454,7 +454,7 @@ echo | openssl s_client -connect kun.uz:443 -servername kun.uz 2>/dev/null \
 | openssl dgst -sha256 -binary \
 | openssl enc -base64
 ```
->SSL Pinning bu ilova va server o'rtasidagi so'rovlarga uchunchi shaxs aralashishidan himoyalaydi.
+>SSL Pinning bu ilova va server o'rtasidagi so'rovlarga uchinchi shaxs aralashishidan himoyalaydi.
 
 
 Yuqoridagi data.jsondan ilovada quyidagicha UI komponentalarini chaqirib ishlatishimiz mumkin bo'ladi.
