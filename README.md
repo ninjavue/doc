@@ -622,7 +622,7 @@ Monitor and improve
 
 Bu bo'limlarda siz `Device integrity checks` yoki `Strong integrity checks` ni tanlab qo'yishingiz zarur bu root qilingan va haqiqiyligi yo'qolgan qurulmalarda play marketdan ilova chiqmasligini taminlaydi.
 
-Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** aniqlash uchun ishlatiladi.  
+Ushbu funksiya ilova ishga tushgan qurilmaning **root qilinganligini** doimiy ravishda aniqlaydi.  
 Agar qurilma root qilingan bo‘lsa, ilova rootlangan qurilmada ishga tushmaydi.
 Bundan tashqari zararli scriptlarni qo'llanganda ham ilova ishga tushmaydi.
 
