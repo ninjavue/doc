@@ -655,6 +655,8 @@ Ushbu funksiya ilova Play Market orqali o‘rnatilganligini aniqlash uchun ishla
 ---
 ## ✍️ Ilova imzosini tekshirish
 
+Ilova imzosini tekshirish — ilovaning haqiqiy ishlab chiquvchi tomonidan chiqarilganini va ilova o‘zgartirilmaganini aniqlash uchun ishlatiladi. Android tizimida har bir APK fayl maxsus raqamli sertifikat bilan imzolanadi. Agar kimdir ilovani decompile qilib, kodini o‘zgartirib yoki zararli kod qo‘shib qayta yig‘sa, u holda yangi APK boshqa kalit bilan imzolanadi va asl imzo bilan mos kelmaydi. Ilova ichida imzo tekshiruvi bo‘lsa, u bunday o‘zgartirilgan APK ni aniqlab, ishlashni to‘xtatishi yoki ba’zi funksiyalarni bloklashi mumkin. Qisqacha aytganda, ilova imzosini tekshirish ilovaning haqiqiyligini tasdiqlash, modifikatsiya qilingan yoki zararli o‘zgartirilgan APK fayllarni aniqlash va foydalanuvchi hamda server xavfsizligini ta’minlash uchun kerak.
+
 Ilova imzosini tekshirish funksiyasi ilovaning ruxsatsiz o‘zgartirilgan APK emasligini aniqlash uchun mo‘ljallangan. U ilovaning imzosini tekshiradi va agar u original imzo bilan mos tushmasa, ilova ishlash jarayonini to'xtatadi. Bu funksiyadan foydalanish uchun `data.json` faylidagi `imzo` ga ilovani imzolash uchun imzo faylni `sha256` qiymatni joylashtiring.
 
 ---
