@@ -398,6 +398,7 @@ Birinchi bosqichda maxfiy ma'lumotlar `data.json` faylga quyidagi formatda yozil
 
 ```json
 {
+    "imzo": "c4fbec9f103e46f13864c208ea93a26a48cd2092428c5dae3b7529703b74f7c9",
     "playmarket": false,
     "emulyator": true,
     "vpn": true,
