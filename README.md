@@ -161,117 +161,30 @@ app/
 │           └── kalit.enc ✅ RSA bilan shifrlangan AES kalit
 |            
 ```
-
- main.dart faylida native (C/C++) kutubxona bilan qanday ishlash ko‘rsatiladi. Bu yerda FFI (Foreign Function Interface) yordamida .so fayldan ma’lumotlar olinadi.
-```dart
+Zirh SDkni flutter loyihaning istalgan joyida chaqirib ishlatishimiz uchun bridge.dart faylini yaratib olamiz.
+bridge.dart faylida native (C/C++) kutubxona bilan qanday ishlash ko‘rsatiladi. Bu yerda FFI (Foreign Function Interface) yordamida .so fayldan ma’lumotlar olinadi.
+```
 import 'dart:convert';
 import 'dart:ffi' as ffi;
+import 'dart:io';
 import 'package:ffi/ffi.dart';
-import 'package:flutter/material.dart';
-```
-dart:ffi → native (C/C++) kod bilan ishlash uchun
-ffi.dart → pointerlarni boshqarish (UTF8 conversion)
-dart:convert → JSON parsing uchun
 
-Native funksiya signaturalari
-
-```dart
-typedef NativeGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8> key);
-typedef DartGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8> key);
-```
-Bu klass native kutubxona bilan ishlashni markazlashtiradi. (Ilovada faqat bitta instance ishlaydi)
-```dart
-static final ZirhService _instance = ZirhService._internal();
-factory ZirhService() => _instance;
-```
-Native kutubxonani yuklash
-
-```dart
-final lib = ffi.DynamicLibrary.open('libmobil.so');
-```
-Funksiyani bog‘lash
-Native funksiyani Flutterga ulaydi
-Key orqali ma’lumot qaytaradi
-```dart
-_getInfo = lib.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
-  'flutter_malumot_olish',
-);
-
-```
-Ma’lumot olish funksiyalari
-```dart
-String get(String key)
-```
-## Minimal kod misolida ko'rishimiz mumkin
-```dart
-import 'dart:convert';
-import 'dart:ffi' as ffi;
-import 'package:ffi/ffi.dart';
-import 'package:flutter/material.dart';
-
-// Native signature
 typedef NativeGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>);
 typedef DartGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>);
 
-class ZirhService {
-  late final DartGetInfoFn _getInfo;
-
-  void init() {
-    final lib = ffi.DynamicLibrary.open('libmobil.so');
-    _getInfo = lib.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
-      'flutter_malumot_olish',
+typedef NativeSetInfoFn = ffi.Void Function(
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
     );
-  }
+typedef DartSetInfoFn = void Function(
+    ffi.Pointer<Utf8>,
+    ffi.Pointer<Utf8>,
+    );
 
-  List<String> getDomains() {
-    final keyPtr = "domainlar".toNativeUtf8();
-    final resPtr = _getInfo(keyPtr);
-    malloc.free(keyPtr);
+typedef NativeFreeFn = ffi.Void Function(ffi.Pointer<Utf8>);
+typedef DartFreeFn = void Function(ffi.Pointer<Utf8>);
 
-    if (resPtr.address == 0) return [];
-
-    final raw = resPtr.toDartString();
-
-    // JSON array bo‘lsa
-    try {
-      final decoded = jsonDecode(raw);
-      if (decoded is List) {
-        return decoded.map((e) => e.toString()).toList();
-      }
-    } catch (_) {}
-
-    // fallback (a,b,c)
-    return raw.split(',').map((e) => e.trim()).toList();
-  }
-}
-
-void main() {
-  final zirh = ZirhService();
-  zirh.init();
-
-  runApp(MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(title: Text("Domains")),
-      body: FutureBuilder(
-        future: Future.value(zirh.getDomains()),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return CircularProgressIndicator();
-
-          final domains = snapshot.data!;
-          return ListView(
-            children: domains.map((d) => ListTile(title: Text(d))).toList(),
-          );
-        },
-      ),
-    ),
-  ));
-}
-```
-## Malumot Almashish 
-
-Dart tomonidan chaqiriladi va native kutubxona bilan to‘g‘ridan-to‘g‘ri bog‘lanadi.
-```dart
-typedef NativeRequestFn = ffi.Pointer<Utf8> Function(
+typedef NativeExchangeFn = ffi.Pointer<Utf8> Function(
     ffi.Pointer<Utf8>,
     ffi.Pointer<Utf8>,
     ffi.Pointer<Utf8>,
@@ -283,7 +196,7 @@ typedef NativeRequestFn = ffi.Pointer<Utf8> Function(
     ffi.Pointer<Utf8>,
     );
 
-typedef DartRequestFn = ffi.Pointer<Utf8> Function(
+typedef DartExchangeFn = ffi.Pointer<Utf8> Function(
     ffi.Pointer<Utf8>,
     ffi.Pointer<Utf8>,
     ffi.Pointer<Utf8>,
@@ -295,6 +208,432 @@ typedef DartRequestFn = ffi.Pointer<Utf8> Function(
     ffi.Pointer<Utf8>,
     );
 
+
+class ZirhService {
+  static final ZirhService _instance = ZirhService._internal();
+  factory ZirhService() => _instance;
+  ZirhService._internal();
+
+  DartGetInfoFn? _getInfo;
+  DartSetInfoFn? _setInfo;
+  DartFreeFn? _freeMemory;
+  DartExchangeFn? _exchange;
+
+  bool _ready = false;
+
+  void init() {
+    try {
+      final dynamicLibrary = Platform.isAndroid
+          ? ffi.DynamicLibrary.open('libmobil.so')
+          : ffi.DynamicLibrary.process();
+
+      _getInfo = dynamicLibrary.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
+        'flutter_malumot_olish',
+      );
+
+      _setInfo = dynamicLibrary.lookupFunction<NativeSetInfoFn, DartSetInfoFn>(
+        'flutter_malumot_almashish',
+      );
+
+      _freeMemory = dynamicLibrary.lookupFunction<NativeFreeFn, DartFreeFn>(
+        'flutter_xotirani_tozalash',
+      );
+
+      _exchange = dynamicLibrary.lookupFunction<
+          NativeExchangeFn,
+          DartExchangeFn>('flutter_malumot_almashish');
+
+      _ready = true;
+      print(" Zirh SDK ulandi");
+    } catch (e) {
+      print(" SDK init xato: $e");
+    }
+  }
+
+  String getRaw(String key) {
+    if (!_ready || _getInfo == null) return "";
+
+    final keyPtr = key.toNativeUtf8();
+    ffi.Pointer<Utf8> resPtr = ffi.nullptr;
+
+    try {
+      resPtr = _getInfo!(keyPtr);
+
+      if (resPtr.address == 0) return "";
+
+      return resPtr.toDartString();
+    } catch (e) {
+      print("GET xatolik: $e");
+      return "";
+    } finally {
+      if (resPtr.address != 0) {
+        _freeMemory?.call(resPtr);
+      }
+      malloc.free(keyPtr);
+    }
+  }
+
+  dynamic getJson(String key) {
+    final raw = getRaw(key);
+    if (raw.isEmpty) return null;
+    try {
+      return jsonDecode(raw);
+    } catch (e) {
+      print("JSON xato ($key): $e");
+      return null;
+    }
+  }
+
+  void setRaw(String key, String value) {
+    if (!_ready || _setInfo == null) return;
+
+    final keyPtr = key.toNativeUtf8();
+    final valuePtr = value.toNativeUtf8();
+
+    try {
+      _setInfo!(keyPtr, valuePtr);
+    } catch (e) {
+      print("SET xatolik: $e");
+    } finally {
+      malloc.free(keyPtr);
+      malloc.free(valuePtr);
+    }
+  }
+
+  void setJson(String key, dynamic value) {
+    try {
+      final jsonString = jsonEncode(value);
+      setRaw(key, jsonString);
+    } catch (e) {
+      print("JSON encode xato: $e");
+    }
+  }
+
+  String exchange({
+    required String url,
+    String method = "GET",
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+    String? filePath,
+    List<int>? fileBytes,
+    String? fileName,
+    String? fileField,
+  }) {
+    if (!_ready || _exchange == null) return "";
+
+    final urlPtr = url.toNativeUtf8();
+    final methodPtr = method.toNativeUtf8();
+    final bodyPtr = (body != null ? jsonEncode(body) : "").toNativeUtf8();
+    final headersPtr =
+    (headers != null ? jsonEncode(headers) : "").toNativeUtf8();
+    final filePathPtr = (filePath ?? "").toNativeUtf8();
+    final fileNamePtr = (fileName ?? "").toNativeUtf8();
+    final fileFieldPtr = (fileField ?? "").toNativeUtf8();
+
+    ffi.Pointer<ffi.Uint8> bytesPtr = ffi.nullptr;
+    int bytesLen = 0;
+
+    if (fileBytes != null && fileBytes.isNotEmpty) {
+      bytesLen = fileBytes.length;
+      bytesPtr = malloc.allocate<ffi.Uint8>(bytesLen);
+      bytesPtr.asTypedList(bytesLen).setAll(0, fileBytes);
+    }
+
+    ffi.Pointer<Utf8> resPtr = ffi.nullptr;
+
+    try {
+      resPtr = _exchange!(
+        urlPtr,
+        methodPtr,
+        bodyPtr,
+        headersPtr,
+        filePathPtr,
+        bytesPtr,
+        bytesLen,
+        fileNamePtr,
+        fileFieldPtr,
+      );
+
+      if (resPtr.address == 0) return "";
+
+      return resPtr.toDartString();
+    } catch (e) {
+      print("EXCHANGE xatolik: $e");
+      return "";
+    } finally {
+      if (resPtr.address != 0) {
+        _freeMemory?.call(resPtr);
+      }
+
+      malloc.free(urlPtr);
+      malloc.free(methodPtr);
+      malloc.free(bodyPtr);
+      malloc.free(headersPtr);
+      malloc.free(filePathPtr);
+      malloc.free(fileNamePtr);
+      malloc.free(fileFieldPtr);
+
+      if (bytesPtr.address != 0) {
+        malloc.free(bytesPtr);
+      }
+    }
+  }
+}
+```
+## Minimal kod misolida ko'rishimiz mumkin
+```dart
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'bridge.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  ZirhService().init();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Dashboard(),
+    );
+  }
+}
+
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  final zirh = ZirhService();
+
+  Map<String, dynamic> ui = {};
+  List<String> domains = [];
+  Map<String, dynamic> api = {};
+
+  String responseText = "";
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  void _load() {
+    final colors = zirh.getJson("ui.colors") ?? {};
+    final labels = zirh.getJson("ui.labels") ?? {};
+    final buttons = zirh.getJson("ui.buttons") ?? {};
+
+    setState(() {
+      ui = {
+        "colors": colors,
+        "labels": labels,
+        "buttons": buttons,
+      };
+
+      final d = zirh.getJson("domainlar");
+      domains = (d is List) ? d.map((e) => e.toString()).toList() : [];
+
+      api = zirh.getJson("api") ?? {};
+      responseText = "";
+    });
+  }
+
+  Color _c(String? hex, Color fallback) {
+    if (hex == null || !hex.startsWith("#")) return fallback;
+    return Color(int.parse(hex.substring(1), radix: 16) + 0xFF000000);
+  }
+
+  void _callApi(String method, String path) async {
+    final baseUrl = api['base_url'] ?? "";
+
+    setState(() {
+      loading = true;
+      responseText = "";
+    });
+
+    try {
+      final res = zirh.exchange(
+        url: baseUrl + path,
+        method: method,
+        body: method == "POST" || method == "PUT"
+            ? {"title": "test", "body": "demo", "userId": 1}  // demo body
+            : null,
+      );
+
+      setState(() {
+        responseText = res;
+      });
+    } catch (e) {
+      setState(() {
+        responseText = "Xatolik: $e";
+      });
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  String _formatJson(String raw) {
+    try {
+      final obj = jsonDecode(raw);
+      return const JsonEncoder.withIndent('  ').convert(obj);
+    } catch (_) {
+      return raw;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = _c(ui['colors']?['primary'], Colors.blue);
+    final bg = _c(ui['colors']?['background'], Colors.black);
+    final card = _c(ui['colors']?['card'], Colors.white10);
+
+    final title = ui['labels']?['dashboard_title'] ?? "Dashboard";
+    final endpoints = api['endpoints'] ?? {};
+
+    return Scaffold(
+      backgroundColor: bg,
+      appBar: AppBar(
+        backgroundColor: primary,
+        title: Text(title),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // Domainlar
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Domainlar",
+                style: TextStyle(
+                  color: primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 120,
+              child: domains.isEmpty
+                  ? const Center(child: Text("Domain yo‘q"))
+                  : ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: domains.length,
+                itemBuilder: (_, i) {
+                  return Container(
+                    width: 250,
+                    margin: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color: card,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      leading: Icon(Icons.link, color: primary),
+                      title: Text(domains[i]),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Endpointlar
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "API Endpointlar",
+                style: TextStyle(
+                  color: primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                children: endpoints.keys.map<Widget>((key) {
+                  final item = endpoints[key];
+                  return Card(
+                    color: card,
+                    child: ListTile(
+                      leading: Icon(Icons.api, color: primary),
+                      title: Text(key),
+                      subtitle: Text("${item['method']}  ${item['path']}"),
+                      onTap: () {
+                        _callApi(item['method'], item['path']);
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // Response preview
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Natija",
+                style: TextStyle(
+                  color: primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              height: 150,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: card,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                child: Text(
+                  responseText.isEmpty
+                      ? "Natija yo‘q"
+                      : _formatJson(responseText),
+                  style: const TextStyle(fontFamily: 'monospace'),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primary,
+                ),
+                onPressed: _load,
+                child: Text(ui['buttons']?['refresh'] ?? "Yangilash"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 ```
 Bizda data.json quyidagicha bo'lgan holatda
 ```dart
@@ -339,33 +678,48 @@ Bizda data.json quyidagicha bo'lgan holatda
     }
 }
 ```
-FFI orqali bog'lanish
-```dart
- final lib = ffi.DynamicLibrary.open('libmobil.so');
-
-_get = lib.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
-  'flutter_malumot_olish',
-);
-
-_request = lib.lookupFunction<NativeRequestFn, DartRequestFn>(
-  'flutter_malumot_almashish',
-);
+## FFI orqali bog‘lanish 
 ```
-API chaqirish qismi
-```dart
-// GET
-zirh.callApi("get_post");
+import 'dart:ffi' as ffi;
+import 'bridge.dart'; // Zirh uchun yaratgan bridge.dart
 
-// POST
-zirh.callApi("create_post", body: {"title": "Test", "body": "Hello", "userId": 1});
-
-// PUT
-zirh.callApi("update_post", body: {"id": 1, "title": "Updated", "body": "Yangilandi"});
-
-// DELETE
-zirh.callApi("delete_post");
+void main() {
+  final zirh = ZirhService();
+  zirh.init();
+}
 ```
 
+```
+// GET request
+String getResp = zirh.exchange(
+  url: "https://api.example.com/posts",
+  method: "GET",
+);
+print("GET javob: $getResp");
+
+// POST request
+String postResp = zirh.exchange(
+  url: "https://api.example.com/posts",
+  method: "POST",
+  body: {"title": "Test", "body": "Hello", "userId": 1},
+);
+print("POST javob: $postResp");
+
+// PUT request
+String putResp = zirh.exchange(
+  url: "https://api.example.com/posts/1",
+  method: "PUT",
+  body: {"title": "Updated", "body": "Yangilandi"},
+);
+print("PUT javob: $putResp");
+
+// DELETE request
+String delResp = zirh.exchange(
+  url: "https://api.example.com/posts/1",
+  method: "DELETE",
+);
+print("DELETE javob: $delResp");
+```
 
 ---
 ### 🔐 Ma'lumotlarni Shifrlash
