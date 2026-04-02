@@ -859,13 +859,10 @@ Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Xcode loyihangizg
 ```
 testzirh1/
 ├── 📦 ZirhIosSDK
-├── 📄 Zirh-Bridging-Header.h
 ├── 📂 testzirh1
 ├── 📂 testzirh1Tests
 ├── 📂 testzirh1UITests
-├── 📂 Products
-├── 🔒 kalit.enc
-└── 🔒 data.enc
+└── 📂 Products
 ```
 
 ### 📦 SDK Integration
@@ -993,7 +990,42 @@ class ZirhSDK {
     }
 }
 ```
+### 🚀 SDK Initialization
 
+SDK to'g'ri ishlashi uchun u ilova yuklanayotgan vaqtda (init) ishga tushirilishi kerak. Buning uchun testzirh1App.swift faylida quyidagi sozlamani bajaring:
+
+1. Ilova ishga tushish nuqtasi:
+
+@main strukturasi ichida init() funksiyasidan foydalanib, .enc fayllari orqali SDK-ni konfiguratsiya qilamiz.
+
+```
+import SwiftUI
+
+@main
+struct testzirh1App: App {
+    
+    init() {
+        // Resurs fayllari yo'lini aniqlash
+        if let keyPath = Bundle.main.path(forResource: "kalit", ofType: "enc"),
+           let dataPath = Bundle.main.path(forResource: "data", ofType: "enc") {
+            
+            // SDK-ni resurslar bilan boshlash
+            ZirhSDK.shared.boshlash(keyPath: keyPath, dataPath: dataPath)
+        }
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+```
+### ⚠️ Muhim eslatma:
+
+kalit.enc va data.enc fayllari Xcode loyihasiga qo'shilganiga va Copy Bundle Resources (Build Phases) bo'limida mavjudligiga ishonch hosil qiling. Aks holda Bundle.main.path qiymati nil qaytaradi.
+
+kalit.enc va data.enc yuqorida berilgan holatda yaratiladi ma'lumotlarni shifrlash qismida batafsil keltirilgan.
 
 ---
 
