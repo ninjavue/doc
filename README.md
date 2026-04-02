@@ -852,11 +852,39 @@ private fun sendGet() {
 ```
 
 ---
-# iOS<img width="96" height="96" alt="image" src="https://github.com/user-attachments/assets/e701a921-8506-4222-982d-21d5c4976c2c" />
-
+# iOS
 
 Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Xcode loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
 
+```
+testzirh1/
+├── 📦 ZirhIosSDK
+├── 📄 Zirh-Bridging-Header.h
+├── 📂 testzirh1
+├── 📂 testzirh1Tests
+├── 📂 testzirh1UITests
+├── 📂 Products
+├── 🔒 kalit.enc
+└── 🔒 data.enc
+```
+
+### 📦 SDK Integration
+
+ZirhIosSDK.xcframework muvaffaqiyatli integratsiya qilinganini tekshirish uchun quyidagi bosqichlarni bajaring:
+
+1. Xcode-da loyiha sozlamalariga kiring (Project Navigator -> testzirh1).
+
+2. General tabiga o'ting.
+
+3. Frameworks, Libraries, and Embedded Content bo'limiga tushing.
+
+4. Ro'yxatda ZirhIosSDK.xcframework borligiga ishonch hosil qiling.
+
+### ⚙️ Framework Configuration
+
+| Target | Framework | Embed Setting |
+| :--- | :--- | :--- |
+| **testzirh1** | 📦 `ZirhIosSDK.xcframework` | **Do Not Embed** |
 
 ---
 
