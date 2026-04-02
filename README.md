@@ -369,6 +369,7 @@ zirh.callApi("delete_post");
 
 ---
 ### 🔐 Ma'lumotlarni Shifrlash
+[![Shifrlash](https://img.shields.io/badge/Ma'lumotlarni%20Shifrlash-blue?style=for-the-badge)](#-ma-lumotlarni-shifrlash)
 
 ### ✨ Nima uchun shifrlash zarur?
 
