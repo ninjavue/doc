@@ -688,7 +688,7 @@ void main() {
   zirh.init();
 }
 ```
-
+API bilan ishlash uchun quyidagi kod namunasidan foydalansak bo'ladi.
 ```
 // GET request
 String getResp = zirh.exchange(
