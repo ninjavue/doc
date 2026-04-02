@@ -858,11 +858,11 @@ private fun sendGet() {
 Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Xcode loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
 
 ```
-testzirh1/
+loyihanomi/
 ├── 📦 ZirhIosSDK
-├── 📂 testzirh1
-├── 📂 testzirh1Tests
-├── 📂 testzirh1UITests
+├── 📂 loyihanomi
+├── 📂 loyihanomiTests
+├── 📂 loyihanomiUITests
 └── 📂 Products
 ```
 
@@ -882,7 +882,7 @@ ZirhIosSDK.xcframework muvaffaqiyatli integratsiya qilinganini tekshirish uchun 
 
 | Target | Framework | Embed Setting |
 | :--- | :--- | :--- |
-| **testzirh1** | 📦 `ZirhIosSDK.xcframework` | **Do Not Embed** |
+| **loyihanomi** | 📦 `ZirhIosSDK.xcframework` | **Embed & Sign** |
 
 ### ⚙️ Bridging Header sozlash
 
@@ -891,10 +891,10 @@ Swift loyihangizda C++ yoki Objective-C kodlaridan foydalanish uchun Bridging He
 1. Fayl strukturasi (Project Skeleton):
 Loyiha ildizida (root) quyidagi fayl mavjudligini tekshiring:
 ```
-testzirh1/
+loyihanomi/
 ├── ...
 ├── 📄 Zirh-Bridging-Header.h  <-- Ushbu faylni yarating
-└── 📂 testzirh1/
+└── 📂 loyihanomi/
 ```
 2. Header tarkibi:
 Zirh-Bridging-Header.h fayli ichiga quyidagi kodni kiriting:
@@ -913,11 +913,11 @@ Header faylini loyihaga tanitish uchun quyidagi sxema bo'yicha yo'lni ko'rsating
 Xcode Project 
 └── 🛠️ Build Settings
     └── 🔍 Search: "Objective-C Bridging Header"
-        └── 🟢 Value: testzirh1/Zirh-Bridging-Header.h
+        └── 🟢 Value: loyihanomi/Zirh-Bridging-Header.h
 ```
 | Setting Key | Value |
 | :--- | :--- |
-| **Objective-C Bridging Header** | `testzirh1/Zirh-Bridging-Header.h` |
+| **Objective-C Bridging Header** | `loyihanomi/Zirh-Bridging-Header.h` |
 
 ### 🛡️ Swift Wrapper yaratish
 
@@ -925,19 +925,19 @@ Native funksiyalarni Swift muhitida oson ishlatish uchun Zirh.swift (wrapper) fa
 
 1. Loyiha arxitekturasi va wrapper faylining joylashuvi quyidagicha:
 ```
-testzirh1/
+loyihanomi/
 ├── 📦 ZirhIosSDK.xcframework
 ├── 📄 Zirh-Bridging-Header.h
-├── 📂 testzirh1/
+├── 📂 loyihanomi/
 │   ├── 🖼️ Assets
 │   ├── 📱 ContentView.swift
-│   ├── 🚀 testzirh1App.swift
+│   ├── 🚀 loyihanomiApp.swift
 │   └── 🛡️ ZirhSDK.swift          <-- Swift Wrapper File
-├── 📂 testzirh1Tests/
-│   └── 📄 testzirh1Tests.swift
-├── 📂 testzirh1UITests/
-│   ├── 📄 testzirh1UITests.swift
-│   └── 📄 testzirh1UITestsLaunchTests.swift
+├── 📂 loyihanomiTests/
+│   └── 📄 loyihanomiTests.swift
+├── 📂 loyihanomiUITests/
+│   ├── 📄 loyihanomiUITests.swift
+│   └── 📄 loyihanomiUITestsLaunchTests.swift
 ├── 📁 Products/
 ├── 🔑 kalit.enc
 └── 🔒 data.enc
@@ -1288,7 +1288,6 @@ struct ContentView: View {
                 }
                 return
             }
-            
             DispatchQueue.main.async {
                 self.resultString = response
                 self.isLoading = false
