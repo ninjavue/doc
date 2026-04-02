@@ -880,11 +880,36 @@ ZirhIosSDK.xcframework muvaffaqiyatli integratsiya qilinganini tekshirish uchun 
 
 4. Ro'yxatda ZirhIosSDK.xcframework borligiga ishonch hosil qiling.
 
-### ⚙️ Framework Configuration
+### ⚙️ Framework sozlash
 
 | Target | Framework | Embed Setting |
 | :--- | :--- | :--- |
 | **testzirh1** | 📦 `ZirhIosSDK.xcframework` | **Do Not Embed** |
+
+### ⚙️ Bridging Header sozlash
+
+Swift loyihangizda C++ yoki Objective-C kodlaridan foydalanish uchun Bridging Header yaratishingiz va sozlashingiz kerak:
+
+1. Fayl strukturasi (Project Skeleton):
+Loyiha ildizida (root) quyidagi fayl mavjudligini tekshiring:
+```
+testzirh1/
+├── ...
+├── 📄 Zirh-Bridging-Header.h  <-- Ushbu faylni yarating
+└── 📂 testzirh1/
+```
+2. Header tarkibi:
+Zirh-Bridging-Header.h fayli ichiga quyidagi kodni kiriting:
+
+```dart
+#ifndef Zirh_Bridging_Header_h
+#define Zirh_Bridging_Header_h
+
+#include "zirh_ios.h"
+
+#endif /* Zirh_Bridging_Header_h */
+```
+
 
 ---
 
