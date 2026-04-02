@@ -168,152 +168,83 @@ import 'dart:convert';
 import 'dart:ffi' as ffi;
 import 'dart:io';
 import 'package:ffi/ffi.dart';
+import 'package:ffi/ffi.dart' as ffi;
 
-typedef NativeGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>);
-typedef DartGetInfoFn = ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>);
+typedef NativeGetInfoFn = ffi.Pointer<ffi.Utf8> Function(ffi.Pointer<ffi.Utf8>);
+typedef DartGetInfoFn = ffi.Pointer<ffi.Utf8> Function(ffi.Pointer<ffi.Utf8>);
 
-typedef NativeSetInfoFn = ffi.Void Function(
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
+typedef NativeExchangeFn = ffi.Pointer<ffi.Utf8> Function(
+    ffi.Pointer<ffi.Utf8>, // url
+    ffi.Pointer<ffi.Utf8>, // method
+    ffi.Pointer<ffi.Utf8>, // body
+    ffi.Pointer<ffi.Utf8>, // headers
+    ffi.Pointer<ffi.Utf8>, // file_path
+    ffi.Pointer<ffi.Uint8>, // file_bytes
+    ffi.Int32,             // bytes_len
+    ffi.Pointer<ffi.Utf8>, // file_name
+    ffi.Pointer<ffi.Utf8>, // file_field
     );
-typedef DartSetInfoFn = void Function(
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    );
-
-typedef NativeFreeFn = ffi.Void Function(ffi.Pointer<Utf8>);
-typedef DartFreeFn = void Function(ffi.Pointer<Utf8>);
-
-typedef NativeExchangeFn = ffi.Pointer<Utf8> Function(
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<ffi.Uint8>,
-    ffi.Int32,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    );
-
-typedef DartExchangeFn = ffi.Pointer<Utf8> Function(
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
+typedef DartExchangeFn = ffi.Pointer<ffi.Utf8> Function(
+    ffi.Pointer<ffi.Utf8>,
+    ffi.Pointer<ffi.Utf8>,
+    ffi.Pointer<ffi.Utf8>,
+    ffi.Pointer<ffi.Utf8>,
+    ffi.Pointer<ffi.Utf8>,
     ffi.Pointer<ffi.Uint8>,
     int,
-    ffi.Pointer<Utf8>,
-    ffi.Pointer<Utf8>,
+    ffi.Pointer<ffi.Utf8>,
+    ffi.Pointer<ffi.Utf8>,
     );
 
+typedef NativeFreeFn = ffi.Void Function(ffi.Pointer<ffi.Utf8>);
+typedef DartFreeFn = void Function(ffi.Pointer<ffi.Utf8>);
 
-class ZirhService {
-  static final ZirhService _instance = ZirhService._internal();
-  factory ZirhService() => _instance;
-  ZirhService._internal();
+class ZirhSDK {
+  static final ZirhSDK shared = ZirhSDK._internal();
+  factory ZirhSDK() => shared;
+  ZirhSDK._internal();
 
   DartGetInfoFn? _getInfo;
-  DartSetInfoFn? _setInfo;
-  DartFreeFn? _freeMemory;
   DartExchangeFn? _exchange;
-
+  DartFreeFn? _freeMemory;
   bool _ready = false;
-
   void init() {
     try {
-      final dynamicLibrary = Platform.isAndroid
+      final lib = Platform.isAndroid
           ? ffi.DynamicLibrary.open('libmobil.so')
           : ffi.DynamicLibrary.process();
 
-      _getInfo = dynamicLibrary.lookupFunction<NativeGetInfoFn, DartGetInfoFn>(
-        'flutter_malumot_olish',
-      );
-
-      _setInfo = dynamicLibrary.lookupFunction<NativeSetInfoFn, DartSetInfoFn>(
-        'flutter_malumot_almashish',
-      );
-
-      _freeMemory = dynamicLibrary.lookupFunction<NativeFreeFn, DartFreeFn>(
-        'flutter_xotirani_tozalash',
-      );
-
-      _exchange = dynamicLibrary.lookupFunction<
-          NativeExchangeFn,
-          DartExchangeFn>('flutter_malumot_almashish');
+      _getInfo = lib.lookupFunction<NativeGetInfoFn, DartGetInfoFn>('flutter_malumot_olish');
+      _exchange = lib.lookupFunction<NativeExchangeFn, DartExchangeFn>('flutter_malumot_almashish');
+      _freeMemory = lib.lookupFunction<NativeFreeFn, DartFreeFn>('flutter_xotirani_tozalash');
 
       _ready = true;
-      print(" Zirh SDK ulandi");
+      print("Zirh SDK tayyor");
     } catch (e) {
-      print(" SDK init xato: $e");
+      print("SDK init xato: $e");
     }
   }
-
-  String getRaw(String key) {
+  String malumotOlish(String path) {
     if (!_ready || _getInfo == null) return "";
 
-    final keyPtr = key.toNativeUtf8();
-    ffi.Pointer<Utf8> resPtr = ffi.nullptr;
+    final pathPtr = path.toNativeUtf8();
+    ffi.Pointer<ffi.Utf8> resPtr = ffi.nullptr;
 
     try {
-      resPtr = _getInfo!(keyPtr);
-
+      resPtr = _getInfo!(pathPtr);
       if (resPtr.address == 0) return "";
-
       return resPtr.toDartString();
-    } catch (e) {
-      print("GET xatolik: $e");
-      return "";
     } finally {
-      if (resPtr.address != 0) {
-        _freeMemory?.call(resPtr);
-      }
-      malloc.free(keyPtr);
+      if (resPtr.address != 0) _freeMemory?.call(resPtr);
+      malloc.free(pathPtr);
     }
   }
 
-  dynamic getJson(String key) {
-    final raw = getRaw(key);
-    if (raw.isEmpty) return null;
-    try {
-      return jsonDecode(raw);
-    } catch (e) {
-      print("JSON xato ($key): $e");
-      return null;
-    }
-  }
-
-  void setRaw(String key, String value) {
-    if (!_ready || _setInfo == null) return;
-
-    final keyPtr = key.toNativeUtf8();
-    final valuePtr = value.toNativeUtf8();
-
-    try {
-      _setInfo!(keyPtr, valuePtr);
-    } catch (e) {
-      print("SET xatolik: $e");
-    } finally {
-      malloc.free(keyPtr);
-      malloc.free(valuePtr);
-    }
-  }
-
-  void setJson(String key, dynamic value) {
-    try {
-      final jsonString = jsonEncode(value);
-      setRaw(key, jsonString);
-    } catch (e) {
-      print("JSON encode xato: $e");
-    }
-  }
-
-  String exchange({
+  String malumotAlmashish({
     required String url,
-    String method = "GET",
-    Map<String, dynamic>? body,
-    Map<String, String>? headers,
+    String method = "POST",
+    String? body,
+    String? headers,
     String? filePath,
     List<int>? fileBytes,
     String? fileName,
@@ -323,23 +254,20 @@ class ZirhService {
 
     final urlPtr = url.toNativeUtf8();
     final methodPtr = method.toNativeUtf8();
-    final bodyPtr = (body != null ? jsonEncode(body) : "").toNativeUtf8();
-    final headersPtr =
-    (headers != null ? jsonEncode(headers) : "").toNativeUtf8();
+    final bodyPtr = (body ?? "").toNativeUtf8();
+    final headersPtr = (headers ?? "").toNativeUtf8();
     final filePathPtr = (filePath ?? "").toNativeUtf8();
     final fileNamePtr = (fileName ?? "").toNativeUtf8();
     final fileFieldPtr = (fileField ?? "").toNativeUtf8();
 
     ffi.Pointer<ffi.Uint8> bytesPtr = ffi.nullptr;
-    int bytesLen = 0;
-
+    int bytesLen = fileBytes?.length ?? 0;
     if (fileBytes != null && fileBytes.isNotEmpty) {
-      bytesLen = fileBytes.length;
       bytesPtr = malloc.allocate<ffi.Uint8>(bytesLen);
       bytesPtr.asTypedList(bytesLen).setAll(0, fileBytes);
     }
 
-    ffi.Pointer<Utf8> resPtr = ffi.nullptr;
+    ffi.Pointer<ffi.Utf8> resPtr = ffi.nullptr;
 
     try {
       resPtr = _exchange!(
@@ -355,15 +283,9 @@ class ZirhService {
       );
 
       if (resPtr.address == 0) return "";
-
       return resPtr.toDartString();
-    } catch (e) {
-      print("EXCHANGE xatolik: $e");
-      return "";
     } finally {
-      if (resPtr.address != 0) {
-        _freeMemory?.call(resPtr);
-      }
+      if (resPtr.address != 0) _freeMemory?.call(resPtr);
 
       malloc.free(urlPtr);
       malloc.free(methodPtr);
@@ -372,10 +294,7 @@ class ZirhService {
       malloc.free(filePathPtr);
       malloc.free(fileNamePtr);
       malloc.free(fileFieldPtr);
-
-      if (bytesPtr.address != 0) {
-        malloc.free(bytesPtr);
-      }
+      if (bytesPtr.address != 0) malloc.free(bytesPtr);
     }
   }
 }
@@ -384,11 +303,11 @@ class ZirhService {
 ```dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'bridge.dart';
+import 'bridge.dart'; // Sizning ZirhSDK wrapper faylingiz
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  ZirhService().init();
+  ZirhSDK.shared.init(); // SDKni ishga tushurish
   runApp(const MyApp());
 }
 
@@ -412,12 +331,11 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  final zirh = ZirhService();
+  final zirh = ZirhSDK.shared;
 
   Map<String, dynamic> ui = {};
   List<String> domains = [];
   Map<String, dynamic> api = {};
-
   String responseText = "";
   bool loading = false;
 
@@ -427,10 +345,11 @@ class _DashboardState extends State<Dashboard> {
     _load();
   }
 
+  // SDK dan JSON konfiguratsiyani o‘qish
   void _load() {
-    final colors = zirh.getJson("ui.colors") ?? {};
-    final labels = zirh.getJson("ui.labels") ?? {};
-    final buttons = zirh.getJson("ui.buttons") ?? {};
+    final colors = _parseJson(zirh.malumotOlish("ui.colors"));
+    final labels = _parseJson(zirh.malumotOlish("ui.labels"));
+    final buttons = _parseJson(zirh.malumotOlish("ui.buttons"));
 
     setState(() {
       ui = {
@@ -439,12 +358,20 @@ class _DashboardState extends State<Dashboard> {
         "buttons": buttons,
       };
 
-      final d = zirh.getJson("domainlar");
-      domains = (d is List) ? d.map((e) => e.toString()).toList() : [];
+      final domainData = _parseJson(zirh.malumotOlish("domainlar"));
+      domains = (domainData is List) ? domainData.map((e) => e.toString()).toList() : [];
 
-      api = zirh.getJson("api") ?? {};
+      api = _parseJson(zirh.malumotOlish("api")) ?? {};
       responseText = "";
     });
+  }
+
+  dynamic _parseJson(String raw) {
+    try {
+      return jsonDecode(raw);
+    } catch (_) {
+      return null;
+    }
   }
 
   Color _c(String? hex, Color fallback) {
@@ -452,6 +379,7 @@ class _DashboardState extends State<Dashboard> {
     return Color(int.parse(hex.substring(1), radix: 16) + 0xFF000000);
   }
 
+  // API chaqiruv
   void _callApi(String method, String path) async {
     final baseUrl = api['base_url'] ?? "";
 
@@ -461,12 +389,10 @@ class _DashboardState extends State<Dashboard> {
     });
 
     try {
-      final res = zirh.exchange(
+      final res = zirh.malumotAlmashish(
         url: baseUrl + path,
         method: method,
-        body: method == "POST" || method == "PUT"
-            ? {"title": "test", "body": "demo", "userId": 1}  // demo body
-            : null,
+        body: (method == "POST" || method == "PUT") ? jsonEncode({"title": "test", "body": "demo", "userId": 1}) : null,
       );
 
       setState(() {
@@ -497,7 +423,6 @@ class _DashboardState extends State<Dashboard> {
     final primary = _c(ui['colors']?['primary'], Colors.blue);
     final bg = _c(ui['colors']?['background'], Colors.black);
     final card = _c(ui['colors']?['card'], Colors.white10);
-
     final title = ui['labels']?['dashboard_title'] ?? "Dashboard";
     final endpoints = api['endpoints'] ?? {};
 
@@ -608,9 +533,7 @@ class _DashboardState extends State<Dashboard> {
                   ? const Center(child: CircularProgressIndicator())
                   : SingleChildScrollView(
                 child: Text(
-                  responseText.isEmpty
-                      ? "Natija yo‘q"
-                      : _formatJson(responseText),
+                  responseText.isEmpty ? "Natija yo‘q" : _formatJson(responseText),
                   style: const TextStyle(fontFamily: 'monospace'),
                 ),
               ),
