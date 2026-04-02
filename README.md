@@ -909,6 +909,90 @@ Zirh-Bridging-Header.h fayli ichiga quyidagi kodni kiriting:
 
 #endif /* Zirh_Bridging_Header_h */
 ```
+3. Xcode sozlamalari (Build Settings):
+Header faylini loyihaga tanitish uchun quyidagi sxema bo'yicha yo'lni ko'rsating:
+```
+Xcode Project 
+└── 🛠️ Build Settings
+    └── 🔍 Search: "Objective-C Bridging Header"
+        └── 🟢 Value: testzirh1/Zirh-Bridging-Header.h
+```
+| Setting Key | Value |
+| :--- | :--- |
+| **Objective-C Bridging Header** | `testzirh1/Zirh-Bridging-Header.h` |
+
+### 🛡️ Swift Wrapper Creation
+
+Native funksiyalarni Swift muhitida oson ishlatish uchun Zirh.swift (wrapper) faylini yarating. Bu klass SDK funksiyalari va Swift kodingiz o'rtasida ko'prik vazifasini o'taydi.
+
+1. Loyiha arxitekturasi va wrapper faylining joylashuvi quyidagicha:
+```
+testzirh1/
+├── 📦 ZirhIosSDK.xcframework
+├── 📄 Zirh-Bridging-Header.h
+├── 📂 testzirh1/
+│   ├── 🖼️ Assets
+│   ├── 📱 ContentView.swift
+│   ├── 🚀 testzirh1App.swift
+│   └── 🛡️ ZirhSDK.swift          <-- Swift Wrapper File
+├── 📂 testzirh1Tests/
+│   └── 📄 testzirh1Tests.swift
+├── 📂 testzirh1UITests/
+│   ├── 📄 testzirh1UITests.swift
+│   └── 📄 testzirh1UITestsLaunchTests.swift
+├── 📁 Products/
+├── 🔑 kalit.enc
+└── 🔒 data.enc
+```
+
+2. Wrapper kodi:
+```
+import Foundation
+class ZirhSDK {
+    static let shared = ZirhSDK()
+    private init() {}
+    func boshlash(keyPath: String, dataPath: String) {
+        zirh_ios_boshlash(keyPath, dataPath)
+    }
+    func malumotOlish(path: String) -> String? {
+        guard let ptr = ios_malumot_olish(path) else {
+            return nil
+        }
+        let result = String(cString: ptr)
+        ios_xotirani_tozalash(ptr)
+        return result
+    }
+    func malumotAlmashish(
+        url: String,
+        method: String = "POST",
+        body: String? = nil,
+        headers: String? = nil,
+        filePath: String? = nil,
+        fileBytes: [UInt8]? = nil,
+        fileName: String? = nil,
+        fileField: String? = nil
+    ) -> String? {
+        let bytesCount = Int32(fileBytes?.count ?? 0)
+        let resultPtr = ios_malumot_almashish(
+            url,
+            method,
+            body,
+            headers,
+            filePath,
+            fileBytes,
+            bytesCount,
+            fileName,
+            fileField
+        )
+        guard let ptr = resultPtr else {
+            return nil
+        }
+        let response = String(cString: ptr)
+        ios_xotirani_tozalash(ptr)
+        return response
+    }
+}
+```
 
 
 ---
