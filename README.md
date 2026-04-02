@@ -2,6 +2,7 @@
 ---
 [![Android](https://img.shields.io/badge/Android-blue?style=for-the-badge)](#android)
 [![Flutter](https://img.shields.io/badge/Flutter-blue?style=for-the-badge)](#Flutter)
+[![iOS](https://img.shields.io/badge/iOS-blue?style=for-the-badge)](#iOS)
 
 ---
 # Android
@@ -850,6 +851,13 @@ private fun sendGet() {
 
 ```
 
+---
+# iOS
+
+Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Xcode loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
+
+
+---
 
 
 
