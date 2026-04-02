@@ -1027,6 +1027,384 @@ kalit.enc va data.enc fayllari Xcode loyihasiga qo'shilganiga va Copy Bundle Res
 
 kalit.enc va data.enc yuqorida berilgan holatda yaratiladi ma'lumotlarni shifrlash qismida batafsil keltirilgan.
 
+### Namunaviy kod
+
+data.jsonni quyidagicha yaratib oldik.
+```
+{
+  "jailbreak":true,
+  "app_config": {
+    "app_name": "Zirh Security Monitor",
+    "theme_color": "#1A73E8",
+    "status_colors": {
+      "safe": "#28A745",
+      "warning": "#FFC107",
+      "error": "#DC3545"
+    }
+  },
+  "ui_theme": {
+    "primary_color": "#1A73E8",
+    "success_color": "#28A745",
+    "danger_color": "#DC3545",
+    "background_style": "dark_gradient",
+    "labels": {
+      "title": "Zirh Security Shield",
+      "check_button": "Xavfsizlikni Tekshirish",
+      "status_secure": "Tizim xavfsiz",
+      "status_compromised": "Xavf aniqlandi!"
+    }
+  },
+  "hashlar": [
+    "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s=",
+    "sha256//ItYAkeNu4OWLwJwqsG+rlGN46LIFJkfrRcx9BFbuTtA=",
+    "sha256//xvnBemDjgnzraqJYsDMz2CgXT2Zq3CFBfmyyYSdLdrU=",
+    "sha256//5BWYNtPxvjsl+qhQLxo3jz3ZaK74xyHT/QdOhBB07i0="
+  ],
+  "domainlar": [
+    "https://jsonplaceholder.typicode.com",
+    "https://httpbin.org"
+  ],
+  "api": {
+    "base_url": "https://jsonplaceholder.typicode.com",
+    "endpoints": {
+      "get_post": {
+        "path": "/posts/1",
+        "method": "GET"
+      },
+      "create_post": {
+        "path": "/posts",
+        "method": "POST"
+      },
+      "update_post": {
+        "path": "/posts/1",
+        "method": "PUT"
+      },
+      "delete_post": {
+        "path": "/posts/1",
+        "method": "DELETE"
+      }
+    }
+  }
+}
+```
+### ⚠️ Muhim eslatma:
+
+jailbreakni true qilish orqali biz ilovani jailbreaklangan qurilmalarda ishlamasligini taminlashimiz mumkin.
+
+ContentView.swift fayliga quyidagi namunaviy kod misolida ishlatib ko'rishimiz mumkin:
+```
+import SwiftUI
+
+struct ContentView: View {
+    
+    // --- SDK dan olinadigan holatlar ---
+    @State private var isSecure: Bool = true
+    @State private var resultString: String = "Javob kutilmoqda..."
+    @State private var isLoading: Bool = false
+    
+    @State private var primaryColor: Color!
+    @State private var successColor: Color!
+    @State private var dangerColor: Color!
+    @State private var labels: [String: String] = [:]
+    
+    @State private var baseURL: String!
+    
+    var body: some View {
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.9), Color.blue.opacity(0.2)]),
+                           startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                if primaryColor != nil && baseURL != nil {
+                    headerView
+                    statusCard
+                    Divider().background(Color.white.opacity(0.2))
+                    Text("Tarmoq Operatsiyalari (CRUD)")
+                        .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                    actionsGrid
+                    consoleView
+                    Spacer()
+                } else {
+                    Text("SDK dan ma’lumot olinmoqda...")
+                        .foregroundColor(.white)
+                        .padding()
+                }
+            }
+            .padding(.top, 20)
+        }
+        .onAppear {
+            // --- SDK dan ranglar ---
+            guard
+                let primaryHex = ZirhSDK.shared.malumotOlish(path: "ui_theme.primary_color"),
+                let successHex = ZirhSDK.shared.malumotOlish(path: "ui_theme.success_color"),
+                let dangerHex = ZirhSDK.shared.malumotOlish(path: "ui_theme.danger_color"),
+                let titleLabel = ZirhSDK.shared.malumotOlish(path: "ui_theme.labels.title"),
+                let checkButton = ZirhSDK.shared.malumotOlish(path: "ui_theme.labels.check_button"),
+                let statusSecure = ZirhSDK.shared.malumotOlish(path: "ui_theme.labels.status_secure"),
+                let statusCompromised = ZirhSDK.shared.malumotOlish(path: "ui_theme.labels.status_compromised"),
+                let apiBase = ZirhSDK.shared.malumotOlish(path: "api.base_url")
+            else {
+                fatalError("SDK dan barcha kerakli ma’lumotlar olinmadi!")
+            }
+            
+            primaryColor = Color(hex: primaryHex)
+            successColor = Color(hex: successHex)
+            dangerColor  = Color(hex: dangerHex)
+            
+            labels = [
+                "title": titleLabel,
+                "check_button": checkButton,
+                "status_secure": statusSecure,
+                "status_compromised": statusCompromised
+            ]
+            
+            baseURL = apiBase
+        }
+    }
+    
+    private var headerView: some View {
+        HStack {
+            Image(systemName: "shield.rhombus.fill")
+                .font(.system(size: 30))
+                .foregroundColor(primaryColor)
+            
+            Text(labels["title"]!)
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            Button(action: {}) {
+                Image(systemName: "arrow.clockwise.circle")
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    private var statusCard: some View {
+        HStack(spacing: 15) {
+            ZStack {
+                Circle()
+                    .stroke(isSecure ? successColor.opacity(0.3) : dangerColor.opacity(0.3), lineWidth: 4)
+                    .frame(width: 50, height: 50)
+                
+                Image(systemName: isSecure ? "checkmark.shield.fill" : "exclamationmark.shield.fill")
+                    .foregroundColor(isSecure ? successColor : dangerColor)
+                    .font(.system(size: 24))
+            }
+            
+            VStack(alignment: .leading) {
+                Text(isSecure ? labels["status_secure"]! : labels["status_compromised"]!)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Text("SSL Pinning faol | Hash tekshiruvi OK")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
+            Spacer()
+        }
+        .padding()
+        .background(Color.white.opacity(0.05))
+        .cornerRadius(15)
+        .padding(.horizontal)
+    }
+    
+    private var actionsGrid: some View {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+            ActionButton(title: "GET Post", icon: "doc.text.magnifyingglass", color: primaryColor) {
+                runSDKAction(key: "get_post")
+            }
+            
+            ActionButton(title: "POST Create", icon: "plus.square.fill", color: successColor) {
+                runSDKAction(key: "create_post")
+            }
+            
+            ActionButton(title: "PUT Update", icon: "pencil.circle.fill", color: .orange) {
+                runSDKAction(key: "update_post")
+            }
+            
+            ActionButton(title: "DELETE Post", icon: "trash.fill", color: dangerColor) {
+                runSDKAction(key: "delete_post")
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    private var consoleView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("TERMINAL OUTPUT")
+                .font(.system(size: 10, weight: .bold))
+                .foregroundColor(.blue)
+            
+            ScrollView {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .padding()
+                } else {
+                    Text(resultString)
+                        .font(.system(size: 12, design: .monospaced))
+                        .foregroundColor(.green.opacity(0.9))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(10)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: 250)
+            .background(Color.black.opacity(0.6))
+            .cornerRadius(10)
+            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.white.opacity(0.1)))
+        }
+        .padding()
+    }
+    
+    func runSDKAction(key: String) {
+        isLoading = true
+        
+        let path: String
+        let method: String
+        
+        switch key {
+        case "get_post": path = "/posts/1"; method = "GET"
+        case "create_post": path = "/posts"; method = "POST"
+        case "update_post": path = "/posts/1"; method = "PUT"
+        case "delete_post": path = "/posts/1"; method = "DELETE"
+        default: fatalError("Noto'g'ri endpoint kalit!")
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let body = (method == "POST" || method == "PUT") ? "{\"title\": \"Zirh Test\", \"body\": \"Swift\", \"userId\": 1}" : nil
+            
+            guard let response = ZirhSDK.shared.malumotAlmashish(url: baseURL + path, method: method, body: body) else {
+                DispatchQueue.main.async {
+                    self.resultString = "Xato: SDK dan javob olinmadi"
+                    self.isLoading = false
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.resultString = response
+                self.isLoading = false
+            }
+        }
+    }
+}
+
+// MARK: - ActionButton Helper
+struct ActionButton: View {
+    let title: String
+    let icon: String
+    let color: Color
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.title2)
+                Text(title)
+                    .font(.system(size: 12, weight: .bold))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(color.opacity(0.15))
+            .foregroundColor(color)
+            .cornerRadius(12)
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(color.opacity(0.4), lineWidth: 1))
+        }
+    }
+}
+
+// MARK: - Hex Color Extension
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let r, g, b: UInt64
+        switch hex.count {
+        case 6: (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        default: fatalError("Hex rang noto‘g‘ri formatda: \(hex)")
+        }
+        self.init(.sRGB,
+                  red: Double(r) / 255,
+                  green: Double(g) / 255,
+                  blue: Double(b) / 255,
+                  opacity: 1)
+    }
+}
+```
+Kodimizni qisqacha tavsifi
+
+data.encdan ma'lumotlarni olish uchun o'zgaruvchilar yaratib oldik.
+```
+@State private var primaryColor: Color!
+@State private var labels: [String: String] = [:]
+@State private var baseURL: String!
+@State private var successColor: Color!
+@State private var dangerColor: Color!
+```
+Ma'lumot olish uchun quyidagicha foydalanamiz.
+```
+primaryColor = Color(hex: ZirhSDK.shared.malumotOlish(path: "ui_theme.primary_color")!)
+labels["title"] = ZirhSDK.shared.malumotOlish(path: "ui_theme.labels.title")
+baseURL = ZirhSDK.shared.malumotOlish(path: "api.base_url")
+```
+Ma'lumot olish uchun esa quyidagicha koddan foydalanamiz.
+(GET, POST, PUT, DELETE ...) so‘rovlarini amalga oshirish mumkin.
+```
+func runSDKAction(key: String) {
+    let path: String
+    let method: String
+    
+    switch key {
+    case "get_post": path = "/posts/1"; method = "GET"
+    case "create_post": path = "/posts"; method = "POST"
+    case "update_post": path = "/posts/1"; method = "PUT"
+    case "delete_post": path = "/posts/1"; method = "DELETE"
+    default: fatalError("Noto'g'ri endpoint kalit!")
+    }
+    
+    let body = (method == "POST" || method == "PUT") ? "{\"title\": \"Zirh Test\", \"body\": \"Swift\", \"userId\": 1}" : nil
+    
+    let response = ZirhSDK.shared.malumotAlmashish(
+        url: baseURL + path,
+        method: method,
+        body: body
+    )
+}
+```
+UI bilan integratsiyada quyidagicha namunaviy kod kabi foydalanishimiz mumkin.
+```
+Text(labels["title"]!)
+    .foregroundColor(.white)
+
+Circle()
+    .stroke(isSecure ? successColor.opacity(0.3) : dangerColor.opacity(0.3), lineWidth: 4)
+```
+Hex ranglarni ishlatish
+data.jsonda odatda ranglarni hex string ("#2563EB") shaklida bergandik. Uni Color ga o‘tkazish uchun extension yaratdik:
+```
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: .alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let r = Double((int >> 16) & 0xFF) / 255
+        let g = Double((int >> 8) & 0xFF) / 255
+        let b = Double(int & 0xFF) / 255
+        self.init(.sRGB, red: r, green: g, blue: b, opacity: 1)
+    }
+}
+```
+Shu bilan, SDK dan olingan hex ranglarni SwiftUI komponentlarida bevosita ishlatish mumkin.
+
 ---
 
 
