@@ -1026,7 +1026,7 @@ struct testzirh1App: App {
 
 kalit.enc va data.enc fayllari Xcode loyihasiga qo'shilganiga va Copy Bundle Resources (Build Phases) bo'limida mavjudligiga ishonch hosil qiling. Aks holda Bundle.main.path qiymati nil qaytaradi.
 
-kalit.enc va data.enc yuqorida berilgan holatda yaratiladi Link: [Ma'lumotlarni Shifrlash](#maʼlumotlarni-shifrlash) qismida batafsil keltirilgan.
+kalit.enc va data.enc yuqorida berilgan holatda yaratiladi. [Ma'lumotlarni Shifrlash](#maʼlumotlarni-shifrlash) qismida batafsil keltirilgan.
 
 ### Namunaviy kod
 
