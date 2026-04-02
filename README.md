@@ -368,7 +368,7 @@ zirh.callApi("delete_post");
 
 
 ---
-## 🔐 Ma'lumotlarni Shifrlash
+### 🔐 Ma'lumotlarni Shifrlash
 
 ### ✨ Nima uchun shifrlash zarur?
 
@@ -918,7 +918,7 @@ Xcode Project
 | :--- | :--- |
 | **Objective-C Bridging Header** | `testzirh1/Zirh-Bridging-Header.h` |
 
-### 🛡️ Swift Wrapper Creation
+### 🛡️ Swift Wrapper yaratish
 
 Native funksiyalarni Swift muhitida oson ishlatish uchun Zirh.swift (wrapper) faylini yarating. Bu klass SDK funksiyalari va Swift kodingiz o'rtasida ko'prik vazifasini o'taydi.
 
@@ -990,7 +990,7 @@ class ZirhSDK {
     }
 }
 ```
-### 🚀 SDK Initialization
+### 🚀 SDKni ishga tushirish
 
 SDK to'g'ri ishlashi uchun u ilova yuklanayotgan vaqtda (init) ishga tushirilishi kerak. Buning uchun testzirh1App.swift faylida quyidagi sozlamani bajaring:
 
@@ -1025,7 +1025,7 @@ struct testzirh1App: App {
 
 kalit.enc va data.enc fayllari Xcode loyihasiga qo'shilganiga va Copy Bundle Resources (Build Phases) bo'limida mavjudligiga ishonch hosil qiling. Aks holda Bundle.main.path qiymati nil qaytaradi.
 
-kalit.enc va data.enc yuqorida berilgan holatda yaratiladi ma'lumotlarni shifrlash qismida batafsil keltirilgan.
+kalit.enc va data.enc yuqorida berilgan holatda yaratiladi Link: [Ma'lumotlarni Shifrlash](#maʼlumotlarni-shifrlash) qismida batafsil keltirilgan.
 
 ### Namunaviy kod
 
