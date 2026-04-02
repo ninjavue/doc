@@ -852,7 +852,8 @@ private fun sendGet() {
 ```
 
 ---
-# iOS
+# iOS<img width="96" height="96" alt="image" src="https://github.com/user-attachments/assets/e701a921-8506-4222-982d-21d5c4976c2c" />
+
 
 Zirh-mobil kutubxonasidan foydalanishni boshlash uchun uni o'z Xcode loyihangizga to'g'ri ulash lozim. Quyidagi bosqichlarni bajaring:
 
