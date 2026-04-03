@@ -1311,6 +1311,13 @@ data.jsonni quyidagicha yaratib oldik.
 ```
 {
   "jailbreak":true,
+  "hashlar": [
+    "sha256//e89QAFJvkB7Tn3QGfsNheN8fgTxZgLECjap1xSq628w=",
+    "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s=",
+    "sha256//ItYAkeNu4OWLwJwqsG+rlGN46LIFJkfrRcx9BFbuTtA=",
+    "sha256//xvnBemDjgnzraqJYsDMz2CgXT2Zq3CFBfmyyYSdLdrU=",
+    "sha256//5BWYNtPxvjsl+qhQLxo3jz3ZaK74xyHT/QdOhBB07i0="
+  ],
   "app_config": {
     "app_name": "Zirh Security Monitor",
     "theme_color": "#1A73E8",
@@ -1332,12 +1339,6 @@ data.jsonni quyidagicha yaratib oldik.
       "status_compromised": "Xavf aniqlandi!"
     }
   },
-  "hashlar": [
-    "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s=",
-    "sha256//ItYAkeNu4OWLwJwqsG+rlGN46LIFJkfrRcx9BFbuTtA=",
-    "sha256//xvnBemDjgnzraqJYsDMz2CgXT2Zq3CFBfmyyYSdLdrU=",
-    "sha256//5BWYNtPxvjsl+qhQLxo3jz3ZaK74xyHT/QdOhBB07i0="
-  ],
   "domainlar": [
     "https://jsonplaceholder.typicode.com",
     "https://httpbin.org"
