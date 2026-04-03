@@ -2081,7 +2081,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: Home());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Home(),
+    );
   }
 }
 
@@ -2095,62 +2098,141 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final zirh = ZirhService();
 
+  // UI
   String title = "Loading...";
+  String buttonText = "Loading...";
+  Color primaryColor = Colors.white;
+  Color successColor = Colors.white;
+  Color dangerColor = Colors.white;
+
+  // API result
   String response = "";
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    loadConfig();
   }
+  void loadConfig() async {
+    final titleRes = await zirh.malumotOlish("ui_theme.labels.title");
+    final btnRes =
+        await zirh.malumotOlish("ui_theme.labels.check_button");
 
-  // 📥 data.enc dan olish
-  void loadData() async {
-    final res = await zirh.malumotOlish("ui_theme.labels.title");
+    final primary =
+        await zirh.malumotOlish("ui_theme.primary_color");
+    final success =
+        await zirh.malumotOlish("ui_theme.success_color");
+    final danger =
+        await zirh.malumotOlish("ui_theme.danger_color");
 
     setState(() {
-      title = res ?? "Topilmadi";
+      title = titleRes ?? "No title";
+      buttonText = btnRes ?? "Click";
+
+      primaryColor = hexToColor(primary ?? "#2196F3");
+      successColor = hexToColor(success ?? "#4CAF50");
+      dangerColor = hexToColor(danger ?? "#F44336");
     });
   }
-
-  // 🌐 API chaqirish
-  void callApi() async {
+  Future<void> callApi(String endpointKey) async {
     final baseUrl = await zirh.malumotOlish("api.base_url");
 
+    final path =
+        await zirh.malumotOlish("api.endpoints.$endpointKey.path");
+    final method =
+        await zirh.malumotOlish("api.endpoints.$endpointKey.method");
+
     final res = await zirh.malumotAlmashish(
-      url: "$baseUrl/posts/1",
-      method: "GET",
+      url: "$baseUrl$path",
+      method: method ?? "GET",
+      body: (method == "POST" || method == "PUT")
+          ? jsonEncode({
+              "title": "test",
+              "body": "demo",
+              "userId": 1
+            })
+          : null,
+      headers: jsonEncode({
+        "Content-Type": "application/json"
+      }),
     );
-    print(res);
 
     setState(() {
       response = res ?? "Xatolik";
     });
   }
 
+  Color hexToColor(String hex) {
+    final cleaned = hex.replaceAll("#", "");
+    return Color(int.parse("0xFF$cleaned"));
+  }
+
+  String formatJson(String text) {
+    try {
+      final decoded = jsonDecode(text);
+      return const JsonEncoder.withIndent('  ').convert(decoded);
+    } catch (e) {
+      return text;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: primaryColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: callApi,
-              child: const Text("API chaqirish"),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                  ),
+                  onPressed: () => callApi("get_post"),
+                  child: Text("GET"),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: successColor,
+                  ),
+                  onPressed: () => callApi("create_post"),
+                  child: const Text("POST"),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                  ),
+                  onPressed: () => callApi("update_post"),
+                  child: const Text("PUT"),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: dangerColor,
+                  ),
+                  onPressed: () => callApi("delete_post"),
+                  child: const Text("DELETE"),
+                ),
+              ],
             ),
+
             const SizedBox(height: 20),
+
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
                   response.isEmpty
                       ? "Natija yo‘q"
-                      : const JsonEncoder.withIndent('  ')
-                          .convert(jsonDecode(response)),
+                      : formatJson(response),
+                  style: const TextStyle(fontSize: 14),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
