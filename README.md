@@ -1684,6 +1684,488 @@ Shu bilan, SDK dan olingan hex ranglarni SwiftUI komponentlarida bevosita ishlat
 
 ---
 
+---
+### Flutter iOS
+Flutter orqali iOS ilovalarini yaratishda quyidagicha ZirhIosSDK.xcframeworkdan foydalanishimiz mumkin.
 
+# Flutterda loyihani tayyorlab olish
+Flutter loyihanggiz joylashgan joydan terminal orqali podsni o'rnatib olishinggiz kerak bo'adi.
+```
+flutter clean
+flutter pub get
+cd ios
+pod install
+cd ..
+```
+# Xcode sozlash
+
+Terminal orqali yoki Xcode orqali yaratgan flutter loyihanggizni ios qismiga kirasiz.
+Terminal orqali esa quyidagicha bo'ladi:
+```
+open ios/Runner.xcworkspace
+```
+ZirhIosSDK.xcframeworkni ulash yuqorida berilgan iOS qo'llanmasidagi bilan bir xil bo'ladi.
+1. ZirhIosSDK.xcframework ni Xcode ga qo‘shing.
+2. Target → General → Frameworks ```Embed & Sign``` tanlangan bo‘lishi kerak
+
+# Bridging Header sozlash
+Runner papkasiga yangi fayl yaratamiz.
+```Zirh-Bridging-Header.h```
+Yaratgan yangi faylimiz quyidagicha kod kiritamiz.
+
+```
+#ifndef Zirh_Bridging_Header_h
+#define Zirh_Bridging_Header_h
+#import "GeneratedPluginRegistrant.h"
+
+#include "zirh_ios.h"
+
+#endif
+```
+Keyin esa Xcode → Build Settings qismidan 
+Objective-C Bridging Header = Runner/Zirh-Bridging-Header.h qiymatni berib qoyishimiz kerak bo'ladi.
+
+# Ma'lumotlarni tayyorlash
+kalit.enc va data.enc yuqorida berilgan holatda yaratiladi. [Ma'lumotlarni Shifrlash](#maʼlumotlarni-shifrlash) qismida batafsil keltirilgan.
+
+### Namunaviy kod
+
+data.jsonni quyidagicha yaratib oldik.
+```
+{
+  "jailbreak":true,
+  "app_config": {
+    "app_name": "Zirh Security Monitor",
+    "theme_color": "#1A73E8",
+    "status_colors": {
+      "safe": "#28A745",
+      "warning": "#FFC107",
+      "error": "#DC3545"
+    }
+  },
+  "ui_theme": {
+    "primary_color": "#1A73E8",
+    "success_color": "#28A745",
+    "danger_color": "#DC3545",
+    "background_style": "dark_gradient",
+    "labels": {
+      "title": "Zirh Security Shield",
+      "check_button": "Xavfsizlikni Tekshirish",
+      "status_secure": "Tizim xavfsiz",
+      "status_compromised": "Xavf aniqlandi!"
+    }
+  },
+  "hashlar": [
+    "sha256//k+swi1D7Mu27FDJ9DAfns27/YipZz5s7BezuYsaXM/s=",
+    "sha256//ItYAkeNu4OWLwJwqsG+rlGN46LIFJkfrRcx9BFbuTtA=",
+    "sha256//xvnBemDjgnzraqJYsDMz2CgXT2Zq3CFBfmyyYSdLdrU=",
+    "sha256//5BWYNtPxvjsl+qhQLxo3jz3ZaK74xyHT/QdOhBB07i0="
+  ],
+  "domainlar": [
+    "https://jsonplaceholder.typicode.com",
+    "https://httpbin.org"
+  ],
+  "api": {
+    "base_url": "https://jsonplaceholder.typicode.com",
+    "endpoints": {
+      "get_post": {
+        "path": "/posts/1",
+        "method": "GET"
+      },
+      "create_post": {
+        "path": "/posts",
+        "method": "POST"
+      },
+      "update_post": {
+        "path": "/posts/1",
+        "method": "PUT"
+      },
+      "delete_post": {
+        "path": "/posts/1",
+        "method": "DELETE"
+      }
+    }
+  }
+}
+```
+### ⚠️ Muhim eslatma:
+
+jailbreakni true qilish orqali biz ilovani jailbreaklangan qurilmalarda ishlamasligini taminlashimiz mumkin.
+# Swift Wrapper (ZirhSDK.swift) yaratish
+ZirhSDK.swift fayl yaratamiz Runner papkamizga va quyidagi kodni kiritamiz.
+```
+//
+//  ZirhSDK.swift
+//  Runner
+//
+//  Created by MACBOOK PRO on 03/04/26.
+//
+import Foundation
+
+class ZirhSDK {
+    static let shared = ZirhSDK()
+    
+    private init() {}
+
+
+    func boshlash(keyPath: String, dataPath: String) {
+     
+        zirh_ios_boshlash(keyPath, dataPath)
+    }
+
+
+    func malumotOlish(path: String) -> String? {
+        
+        guard let ptr = ios_malumot_olish(path) else {
+            return nil
+        }
+        
+        let result = String(cString: ptr)
+        
+
+        ios_xotirani_tozalash(ptr)
+        
+        return result
+    }
+
+
+    func malumotAlmashish(
+        url: String,
+        method: String = "POST",
+        body: String? = nil,
+        headers: String? = nil,
+        filePath: String? = nil,
+        fileBytes: [UInt8]? = nil,
+        fileName: String? = nil,
+        fileField: String? = nil
+    ) -> String? {
+        
+
+        let bytesCount = Int32(fileBytes?.count ?? 0)
+        
+
+        let resultPtr = ios_malumot_almashish(
+            url,
+            method,
+            body,
+            headers,
+            filePath,
+            fileBytes,
+            bytesCount,
+            fileName,
+            fileField
+        )
+        
+        guard let ptr = resultPtr else {
+            return nil
+        }
+        
+        let response = String(cString: ptr)
+        
+        ios_xotirani_tozalash(ptr)
+        
+        return response
+    }
+}
+
+```
+# SDK init qilish
+
+AppDeleget da sdkni ishga tushirish qismini yozib olamiz.
+```
+if let keyPath = Bundle.main.path(forResource: "kalit", ofType: "enc"),
+           let dataPath = Bundle.main.path(forResource: "data", ofType: "enc") {
+
+            ZirhSDK.shared.boshlash(keyPath: keyPath, dataPath: dataPath)
+        }
+```
+# Flutter ↔ iOS MethodChannel
+Quyidagi namuna kabi yozishimiz mumkin iOS va Flutter uchun iOS qismida methodchannel
+```
+let channel = FlutterMethodChannel(name: "zirh_sdk", binaryMessenger: controller.binaryMessenger)
+
+channel.setMethodCallHandler { call, result in
+    switch call.method {
+    case "malumotOlish":
+        let args = call.arguments as! [String: Any]
+        let path = args["path"] as! String
+        result(ZirhSDK.shared.malumotOlish(path: path))
+    default:
+        result(FlutterMethodNotImplemented)
+    }
+}
+```
+
+Quyida AppDelegete to'liq qilingan namunaviy kodi berilgan:
+
+```
+import UIKit
+import Flutter
+
+@main
+@objc class AppDelegate: FlutterAppDelegate {
+    
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        
+        if let keyPath = Bundle.main.path(forResource: "kalit", ofType: "enc"),
+           let dataPath = Bundle.main.path(forResource: "data", ofType: "enc") {
+
+            ZirhSDK.shared.boshlash(keyPath: keyPath, dataPath: dataPath)
+        }
+        
+        let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
+        let channel = FlutterMethodChannel(name: "zirh_sdk", binaryMessenger: controller.binaryMessenger)
+        
+        // --- Malumot olish ---
+        channel.setMethodCallHandler { call, result in
+            switch call.method {
+            case "malumotOlish":
+                guard let args = call.arguments as? [String: Any],
+                      let path = args["path"] as? String else {
+                    result(FlutterError(code: "INVALID_ARGS", message: "Path missing", details: nil))
+                    return
+                }
+                let jsonString = ZirhSDK.shared.malumotOlish(path: path)
+                result(jsonString)
+            
+            case "malumotAlmashish":
+                guard let args = call.arguments as? [String: Any],
+                      let url = args["url"] as? String,
+                      let method = args["method"] as? String else {
+                    result(FlutterError(code: "INVALID_ARGS", message: "URL/method missing", details: nil))
+                    return
+                }
+                
+                let body = args["body"] as? String
+                let headers = args["headers"] as? String
+                let filePath = args["filePath"] as? String
+                let fileBytes = args["fileBytes"] as? FlutterStandardTypedData
+                let fileName = args["fileName"] as? String
+                let fileField = args["fileField"] as? String
+                
+                let bytes: [UInt8]? = fileBytes?.data.toBytes()
+                
+                let response = ZirhSDK.shared.malumotAlmashish(
+                    url: url,
+                    method: method,
+                    body: body,
+                    headers: headers,
+                    filePath: filePath,
+                    fileBytes: bytes,
+                    fileName: fileName,
+                    fileField: fileField
+                )
+                result(response)
+                
+            default:
+                result(FlutterMethodNotImplemented)
+            }
+        }
+        
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+}
+
+extension Data {
+    func toBytes() -> [UInt8] {
+        return [UInt8](self)
+    }
+}
+```
+# Flutter tomonda ham methodchannel yaratish
+Flutterda ham methodchannel yaratib olamiz. bridge.dart faylini yaratib uning ichiga quyidagicha qilib methodchannel uchun kod kiritamiz.
+
+```
+class ZirhService {
+  static const _platform = MethodChannel('zirh_sdk');
+
+  Future<String?> malumotOlish(String path) async {
+    return await _platform.invokeMethod('malumotOlish', {
+      "path": path,
+    });
+  }
+}
+```
+
+Namunaviy kod quyidagicha keltirilgan:
+```
+import 'package:flutter/services.dart';
+
+class ZirhService {
+  static const _platform = MethodChannel('zirh_sdk');
+
+  // 📥 data.enc dan ma'lumot olish
+  Future<String?> malumotOlish(String path) async {
+    try {
+      final res = await _platform.invokeMethod<String>(
+        'malumotOlish',
+        {"path": path},
+      );
+      return res;
+    } catch (e) {
+      print("Xato: $e");
+      return null;
+    }
+  }
+
+  // 🌐 API bilan ishlash
+  Future<String?> malumotAlmashish({
+    required String url,
+    required String method,
+    String? body,
+    String? headers,
+    String? filePath,
+    List<int>? fileBytes,
+    String? fileName,
+    String? fileField,
+  }) async {
+    try {
+      final res = await _platform.invokeMethod<String>(
+        'malumotAlmashish',
+        {
+          "url": url,
+          "method": method,
+          "body": body,
+          "headers": headers,
+          "filePath": filePath,
+          "fileBytes": fileBytes,
+          "fileName": fileName,
+          "fileField": fileField,
+        },
+      );
+      return res;
+    } catch (e) {
+      print("Xato: $e");
+      return null;
+    }
+  }
+}
+```
+# Ma'lumot olish va almashish
+data.encdan sdk orqali malumotOlish va malumotAlmashishni quyidagicha qilib bajaraishimiz mumkin.
+```
+final zirh = ZirhService();
+
+String? title = await zirh.malumotOlish("ui_theme.labels.title");
+```
+```
+await zirh.malumotAlmashish(
+  url: "https://jsonplaceholder.typicode.com/posts",
+  method: "POST",
+  body: jsonEncode({
+    "title": "test",
+    "body": "demo",
+    "userId": 1
+  }),
+  headers: jsonEncode({
+    "Content-Type": "application/json"
+  }),
+);
+```
+
+Namunaviy kod 
+```
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'bridge.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(home: Home());
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final zirh = ZirhService();
+
+  String title = "Loading...";
+  String response = "";
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  // 📥 data.enc dan olish
+  void loadData() async {
+    final res = await zirh.malumotOlish("ui_theme.labels.title");
+
+    setState(() {
+      title = res ?? "Topilmadi";
+    });
+  }
+
+  // 🌐 API chaqirish
+  void callApi() async {
+    final baseUrl = await zirh.malumotOlish("api.base_url");
+
+    final res = await zirh.malumotAlmashish(
+      url: "$baseUrl/posts/1",
+      method: "GET",
+    );
+    print(res);
+
+    setState(() {
+      response = res ?? "Xatolik";
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: callApi,
+              child: const Text("API chaqirish"),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  response.isEmpty
+                      ? "Natija yo‘q"
+                      : const JsonEncoder.withIndent('  ')
+                          .convert(jsonDecode(response)),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+# Muhim eslatma
+Agar hashlar noto‘g‘ri bo‘lsa:
+request ishlamaydi
+500 yoki empty response keladi.
+Hash qiymatlar doim tog'ri kiritilishiga etibor bering.
+"hashlar": []
+
+---
 
 
