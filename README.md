@@ -146,6 +146,12 @@ allprojects {
     }
 }
 ```
+jitpack orqali qo'shishda app modulining build.gradle.kts faylida kutubxonani ulash
+```
+dependencies {
+    implementation(files("libs/zirh-mobil-lib-release.aar"))
+}
+```
 Eslatma:
 
 Kutubxonaning nomi `.aar` fayl nomi bilan to'g'ri kelishi kerak `(zirh-mobil-lib-release.aar)`.
